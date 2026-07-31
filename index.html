@@ -3,97 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daniel Ayobamidele Grace — Software Engineer</title>
-<meta name="description" content="Portfolio of Daniel Ayobamidele Grace — Software Engineer, Aerospace Systems, 3D Visualization.">
+<title>Daniel Ayobamidele Grace // Software Engineer</title>
+<meta name="description" content="Portfolio of Daniel Ayobamidele Grace. Software Engineer, Aerospace Systems, 3D Visualization.">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0d0f14;--surface:#141720;--accent:#4f8ef7;--orange:#f97316;
-  --green:#22c55e;--purple:#a855f7;--text:#e2e8f0;--muted:#64748b;
-  --border:#1e2433;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --bg:#0a0c12;--surface:#111520;--accent:#00ff41;--accent-dim:rgba(0,255,65,.15);
+  --blue:#4f8ef7;--orange:#f97316;--green:#22c55e;--purple:#a855f7;--red:#ef4444;
+  --text:#e2e8f0;--muted:#64748b;--border:#1a1f2e;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   --mono:'SF Mono','Cascadia Code','Consolas',monospace;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
-a{color:var(--accent);text-decoration:none;transition:opacity .2s}
-a:hover{opacity:.8}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;padding-top:3.2rem;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none;transition:color .2s,opacity .2s}
+a:hover{opacity:.85}
 
-/* Layout */
-.container{max-width:800px;margin:0 auto;padding:0 1.25rem}
-section{padding:4rem 0}
-.divider{height:1px;background:var(--border);margin:0 auto;max-width:800px}
+.container{max-width:820px;margin:0 auto;padding:0 1.25rem}
+section{padding:4.5rem 0}
 
-/* Hero */
-.hero{padding:6rem 0 4rem;text-align:center}
-.hero h1{font-size:clamp(1.75rem,5vw,2.5rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem}
-.hero .subtitle{color:var(--muted);font-size:1.05rem;margin-bottom:.25rem}
-.hero .location{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
-.hero-links{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem 1.25rem}
-.hero-links a{font-size:.9rem;display:inline-flex;align-items:center;gap:.35rem}
+/* Radar grid background */
+body::before{
+  content:'';position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,255,65,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,65,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
 
-/* Section headings */
-.section-title{font-size:1.35rem;font-weight:600;margin-bottom:1.5rem;letter-spacing:-.01em;position:relative;padding-bottom:.5rem}
-.section-title::after{content:'';position:absolute;bottom:0;left:0;width:2rem;height:2px;background:var(--accent)}
-
-/* About */
-.about p{color:var(--text);line-height:1.8;font-size:.95rem}
-
-/* Skills */
-.skill-group{margin-bottom:1.25rem}
-.skill-group-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem;font-weight:600}
-.pills{display:flex;flex-wrap:wrap;gap:.4rem}
-.pill{background:var(--surface);border:1px solid var(--border);border-radius:9999px;padding:.3rem .8rem;font-size:.8rem;color:var(--text);white-space:nowrap}
-
-/* Education */
-.edu-item{padding:.75rem 0;border-bottom:1px solid var(--border)}
-.edu-item:last-child{border-bottom:none}
-.edu-title{font-weight:600;font-size:.95rem}
-.edu-meta{color:var(--muted);font-size:.85rem}
-.badge{display:inline-block;font-size:.7rem;padding:.15rem .5rem;border-radius:9999px;font-weight:600;margin-left:.5rem;vertical-align:middle}
-.badge--progress{background:rgba(79,142,247,.15);color:var(--accent)}
-.badge--done{background:rgba(34,197,94,.12);color:var(--green)}
-
-/* Project cards */
-.projects-grid{display:grid;gap:1rem}
-.project-card{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:1.25rem 1.5rem;transition:border-color .2s,transform .2s}
-.project-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.project-card h3{font-size:1rem;font-weight:600;margin-bottom:.4rem}
-.project-card p{color:var(--muted);font-size:.875rem;margin-bottom:.75rem;line-height:1.6}
-.project-card a{font-size:.85rem;font-weight:500}
-
-/* Experience */
-.exp-item{display:flex;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
-.exp-item:last-child{border-bottom:none}
-.exp-date{min-width:90px;font-size:.75rem;color:var(--muted);font-family:var(--mono);padding-top:.15rem}
-.exp-role{font-weight:600;font-size:.95rem}
-.exp-co{color:var(--muted);font-size:.85rem}
-.exp-desc{color:var(--muted);font-size:.8rem;margin-top:.25rem;line-height:1.5}
-@media(max-width:600px){.exp-item{flex-direction:column;gap:.25rem}.exp-date{min-width:auto}}
-
-/* Current focus */
-.focus-list{list-style:none;padding:0}
-.focus-list li{position:relative;padding-left:1.25rem;margin-bottom:.6rem;font-size:.95rem;color:var(--text)}
-.focus-list li::before{content:'\203A';position:absolute;left:0;color:var(--accent);font-weight:700}
-
-/* Footer */
-footer{padding:2.5rem 0;text-align:center;border-top:1px solid var(--border)}
-footer p{color:var(--muted);font-size:.85rem;margin-bottom:.35rem}
-footer a{font-size:.85rem}
+/* Runway divider */
+.runway{height:2px;margin:0 auto;max-width:820px;position:relative;display:flex;align-items:center;justify-content:center}
+.runway::before{content:'';position:absolute;width:100%;height:0;border-top:2px dashed rgba(0,255,65,.2)}
+.runway-label{background:var(--bg);padding:0 1rem;font-size:.65rem;text-transform:uppercase;letter-spacing:.2em;color:rgba(0,255,65,.35);font-family:var(--mono);position:relative;z-index:1}
 
 /* Nav */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,15,20,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.65rem 0;transition:transform .3s}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,12,18,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.6rem 0}
 .nav .container{display:flex;justify-content:space-between;align-items:center}
-.nav-name{font-weight:600;font-size:.9rem;color:var(--text)}
+.nav-brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;color:var(--accent);letter-spacing:.05em}
+.nav-plane{width:18px;height:18px;animation:planeFloat 3s ease-in-out infinite}
+@keyframes planeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 .nav-links{display:flex;gap:1rem}
-.nav-links a{color:var(--muted);font-size:.8rem;transition:color .2s}
-.nav-links a:hover{color:var(--text);opacity:1}
-body{padding-top:3rem}
+.nav-links a{color:var(--muted);font-size:.78rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;transition:color .2s,text-shadow .2s}
+.nav-links a:hover{color:var(--accent);text-shadow:0 0 8px rgba(0,255,65,.4);opacity:1}
 
-@media(max-width:600px){
-  .hero{padding:4rem 0 3rem}
+/* Hero */
+.hero{padding:6rem 0 4rem;text-align:center;position:relative}
+.hero h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem}
+.hero .subtitle{color:var(--accent);font-size:1rem;font-family:var(--mono);margin-bottom:.25rem;min-height:1.5em}
+.hero .subtitle .cursor{animation:blink .7s step-end infinite;color:var(--accent)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hero .location{color:var(--muted);font-size:.85rem;margin-bottom:1.75rem}
+.hero-links{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem}
+.hero-links a{
+  font-size:.8rem;display:inline-flex;align-items:center;gap:.3rem;color:var(--muted);
+  padding:.35rem .75rem;border:1px solid var(--border);border-radius:4px;
+  font-family:var(--mono);transition:all .3s;position:relative;overflow:hidden;
+}
+.hero-links a::before{content:'';position:absolute;bottom:0;left:0;width:100%;height:0;background:var(--accent-dim);transition:height .3s}
+.hero-links a:hover{color:var(--accent);border-color:var(--accent);opacity:1;transform:translateY(-2px)}
+.hero-links a:hover::before{height:100%}
+
+/* Stats bar */
+.stats-bar{display:flex;justify-content:center;gap:2.5rem;margin-top:2.5rem;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-size:1.6rem;font-weight:700;font-family:var(--mono);color:var(--accent)}
+.stat-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.15rem}
+
+/* Section titles */
+.section-title{font-size:1.3rem;font-weight:600;margin-bottom:1.75rem;letter-spacing:-.01em;display:flex;align-items:center;gap:.6rem}
+.section-title .tag{font-size:.6rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.15em;color:var(--accent);background:var(--accent-dim);padding:.2rem .5rem;border-radius:3px}
+
+/* About */
+.about p{color:var(--text);line-height:1.85;font-size:.95rem;opacity:.9}
+
+/* Skills */
+.skill-group{margin-bottom:1.5rem}
+.skill-group-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:.5rem;font-weight:600;font-family:var(--mono)}
+.pills{display:flex;flex-wrap:wrap;gap:.4rem}
+.pill{
+  background:var(--surface);border:1px solid var(--border);border-radius:4px;
+  padding:.3rem .75rem;font-size:.78rem;color:var(--text);white-space:nowrap;
+  font-family:var(--mono);transition:all .3s;cursor:default;
+}
+.pill:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 0 12px rgba(0,255,65,.15);transform:translateY(-1px)}
+
+/* Project cards */
+.projects-grid{display:grid;gap:1.25rem}
+.project-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:8px;
+  padding:1.5rem;transition:all .4s;position:relative;overflow:hidden;
+  transform-style:preserve-3d;perspective:800px;
+}
+.project-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.project-card:hover{border-color:var(--accent);box-shadow:0 8px 32px rgba(0,255,65,.08)}
+.project-card:hover::before{opacity:1}
+.project-card .card-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.project-card .card-icon{color:var(--accent);font-size:1.1rem}
+.project-card h3{font-size:1.05rem;font-weight:600}
+.project-card p{color:var(--muted);font-size:.875rem;margin-bottom:.85rem;line-height:1.65}
+.project-card .card-link{font-size:.82rem;font-weight:600;font-family:var(--mono);display:inline-flex;align-items:center;gap:.3rem;transition:gap .2s}
+.project-card:hover .card-link{gap:.5rem}
+
+/* Experience timeline */
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:.5rem;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),var(--blue),var(--orange));opacity:.3}
+.exp-item{position:relative;padding:.85rem 0 .85rem 1.5rem;border-bottom:1px solid var(--border)}
+.exp-item:last-child{border-bottom:none}
+.exp-item::before{content:'';position:absolute;left:calc(-1.5rem + .5rem - 4px);top:1.15rem;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);z-index:1}
+.exp-item:nth-child(2)::before{background:var(--blue)}
+.exp-item:nth-child(3)::before{background:var(--blue)}
+.exp-item:nth-child(4)::before{background:var(--orange)}
+.exp-item:nth-child(5)::before{background:var(--orange)}
+.exp-date{font-size:.7rem;color:var(--accent);font-family:var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.exp-role{font-weight:600;font-size:.95rem;margin-top:.1rem}
+.exp-co{color:var(--muted);font-size:.82rem}
+.exp-desc{color:var(--muted);font-size:.8rem;margin-top:.2rem;line-height:1.55}
+
+/* Certs */
+.cert-group{margin-bottom:1.75rem}
+.cert-group-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:.6rem;font-weight:600;font-family:var(--mono);display:flex;align-items:center;gap:.4rem}
+.cert-item{
+  padding:.65rem .85rem;border:1px solid var(--border);border-radius:6px;
+  margin-bottom:.5rem;background:var(--surface);transition:all .3s;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.cert-item:hover{border-color:rgba(0,255,65,.3);transform:translateX(4px)}
+.cert-title{font-weight:600;font-size:.88rem}
+.cert-meta{color:var(--muted);font-size:.78rem;font-family:var(--mono)}
+
+/* Focus */
+.focus-list{list-style:none;padding:0}
+.focus-list li{
+  position:relative;padding:.6rem 0 .6rem 1.5rem;font-size:.92rem;color:var(--text);
+  border-bottom:1px solid var(--border);
+}
+.focus-list li:last-child{border-bottom:none}
+.focus-list li::before{content:'>';position:absolute;left:0;color:var(--accent);font-family:var(--mono);font-weight:700}
+
+/* Compass */
+.compass-container{position:fixed;bottom:2rem;right:2rem;z-index:50;opacity:.2;pointer-events:none}
+.compass{width:60px;height:60px;animation:compassSpin 20s linear infinite}
+@keyframes compassSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* Footer */
+footer{padding:3rem 0;text-align:center;border-top:1px solid var(--border);position:relative}
+footer::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:1px;background:var(--accent)}
+footer p{color:var(--muted);font-size:.8rem;margin-bottom:.4rem}
+footer .cta-link{font-size:.85rem;font-family:var(--mono)}
+
+/* Scroll animations */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.slide-in-left{opacity:0;transform:translateX(-20px);transition:opacity .5s ease,transform .5s ease}
+.slide-in-left.visible{opacity:1;transform:translateX(0)}
+
+@media(max-width:640px){
+  .hero{padding:4.5rem 0 3rem}
   section{padding:3rem 0}
-  .nav-links{gap:.6rem}
-  .nav-links a{font-size:.75rem}
+  .nav-links{gap:.5rem}
+  .nav-links a{font-size:.68rem}
+  .stats-bar{gap:1.5rem}
+  .timeline{padding-left:1.5rem}
+  .compass-container{display:none}
+  .exp-item{padding-left:1rem}
 }
 </style>
 </head>
@@ -101,14 +177,18 @@ body{padding-top:3rem}
 
 <nav class="nav">
   <div class="container">
-    <span class="nav-name">CG</span>
+    <span class="nav-brand">
+      <svg class="nav-plane" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/>
+      </svg>
+      DG
+    </span>
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
-      <a href="#experience">Experience</a>
-      <a href="#certs">Credentials</a>
       <a href="#projects">Projects</a>
-      <a href="#focus">Focus</a>
+      <a href="#experience">Experience</a>
+      <a href="#certs">Certs</a>
       <a href="./contact.html">Contact</a>
     </div>
   </div>
@@ -117,35 +197,40 @@ body{padding-top:3rem}
 <header class="hero">
   <div class="container">
     <h1>Daniel Ayobamidele Grace</h1>
-    <p class="subtitle">Software Engineer | Aerospace Systems | 3D Visualization</p>
+    <p class="subtitle" id="typed-subtitle"><span class="cursor">|</span></p>
     <p class="location">Lagos, Nigeria</p>
     <div class="hero-links">
-      <a href="https://github.com/DrDanielGrace" target="_blank" rel="noopener">[GitHub]</a>
-      <a href="https://www.linkedin.com/in/danielayobamideleojo/" target="_blank" rel="noopener">[LinkedIn]</a>
-      <a href="https://x.com/DrDanielCGrace" target="_blank" rel="noopener">[X / Twitter]</a>
-      <a href="mailto:ayobamideledanielojo@gmail.com">[Email]</a>
+      <a href="https://github.com/DrDanielGrace" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/danielayobamideleojo/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://x.com/DrDanielCGrace" target="_blank" rel="noopener">X</a>
+      <a href="mailto:ayobamideledanielojo@gmail.com">Email</a>
+    </div>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num" data-target="5">0</div><div class="stat-label">Roles</div></div>
+      <div class="stat"><div class="stat-num" data-target="7">0</div><div class="stat-label">Certifications</div></div>
+      <div class="stat"><div class="stat-num" data-target="2">0</div><div class="stat-label">Projects</div></div>
     </div>
   </div>
 </header>
 
-<div class="divider"></div>
+<div class="runway"><span class="runway-label">RWY 09/27</span></div>
 
 <section id="about">
-  <div class="container">
-    <h2 class="section-title">About</h2>
+  <div class="container fade-in">
+    <h2 class="section-title"><span class="tag">CLR</span> About</h2>
     <div class="about">
       <p>
-        I build software at the intersection of aerospace, autonomous systems, and 3D visualization. Trained in flight dispatch with certifications from Lagos Aviation Academy and the FAA Safety Team. I work across Python, C, and C++ in data science, simulation, and real-time applications, and create architectural visualizations and cinematic content using Unreal Engine 5 and professional animation tools. My long-term goal is to contribute to indigenous satellite launches from Nigeria.
+        I build software at the intersection of aerospace, autonomous systems, and 3D visualization. Trained in flight dispatch with certifications from Lagos Aviation Academy and the FAA Safety Team. I work across Python, C, and C++ in data science, simulation, and real-time applications, and create architectural visualizations and cinematic content using Unreal Engine 5 and professional animation tools. Long-term goal: contribute to indigenous satellite launches from Nigeria.
       </p>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="runway"><span class="runway-label">TWY A</span></div>
 
 <section id="skills">
-  <div class="container">
-    <h2 class="section-title">Skills</h2>
+  <div class="container fade-in">
+    <h2 class="section-title"><span class="tag">SYS</span> Skills</h2>
 
     <div class="skill-group">
       <div class="skill-group-label">Languages</div>
@@ -167,7 +252,6 @@ body{padding-top:3rem}
         <span class="pill">After Effects</span>
         <span class="pill">Git / GitHub</span>
         <span class="pill">VS Code</span>
-        <span class="pill">Google Sheets</span>
       </div>
     </div>
 
@@ -180,180 +264,149 @@ body{padding-top:3rem}
         <span class="pill">Autonomous Navigation</span>
         <span class="pill">3D Archviz</span>
         <span class="pill">Cinematography</span>
-        <span class="pill">Animation</span>
         <span class="pill">AI / ML</span>
-        <span class="pill">Data Annotation</span>
         <span class="pill">Game Development</span>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="runway"><span class="runway-label">RWY 18/36</span></div>
+
+<section id="projects">
+  <div class="container fade-in">
+    <h2 class="section-title"><span class="tag">NAV</span> Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card" onmousemove="tiltCard(event,this)" onmouseleave="resetCard(this)">
+        <div class="card-header">
+          <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/></svg>
+          <h3>Live Flight Tracker</h3>
+        </div>
+        <p>Real-time aircraft tracking over any location on Earth. Pulls live ADS-B data from the OpenSky Network, geocodes via Nominatim, and outputs callsign, altitude, speed, and registration country.</p>
+        <a href="./projects/flight-tracker.html" class="card-link">View Project &#8594;</a>
+      </div>
+
+      <div class="project-card" onmousemove="tiltCard(event,this)" onmouseleave="resetCard(this)">
+        <div class="card-header">
+          <svg class="card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" fill="currentColor"/></svg>
+          <h3>Drone Mission Planner</h3>
+        </div>
+        <p>Pre-flight feasibility calculator for autonomous drone delivery missions. Computes distance, round-trip flight time, battery requirements, and go/no-go decisions before takeoff.</p>
+        <a href="./projects/drone-mission-planner.html" class="card-link">View Project &#8594;</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="runway"><span class="runway-label">TWY B</span></div>
 
 <section id="experience">
-  <div class="container">
-    <h2 class="section-title">Experience</h2>
+  <div class="container fade-in">
+    <h2 class="section-title"><span class="tag">LOG</span> Experience</h2>
 
-    <div class="exp-item">
-      <div class="exp-date">2025 &mdash; now</div>
-      <div>
+    <div class="timeline">
+      <div class="exp-item slide-in-left">
+        <div class="exp-date">2025 // Present</div>
         <div class="exp-role">Game Developer</div>
         <div class="exp-co">Creative Grace</div>
         <div class="exp-desc">Game development and 3D visualization using Unreal Engine 5</div>
       </div>
-    </div>
 
-    <div class="exp-item">
-      <div class="exp-date">2025 &mdash; now</div>
-      <div>
+      <div class="exp-item slide-in-left">
+        <div class="exp-date">2025 // Present</div>
         <div class="exp-role">Data Annotator</div>
         <div class="exp-co">Stellar AI &middot; Contract</div>
         <div class="exp-desc">UI/UX annotation and evaluation to improve generative AI model accuracy and interface responsiveness</div>
       </div>
-    </div>
 
-    <div class="exp-item">
-      <div class="exp-date">2025 &mdash; 2026</div>
-      <div>
+      <div class="exp-item slide-in-left">
+        <div class="exp-date">2025 // 2026</div>
         <div class="exp-role">AI Training Contributor</div>
         <div class="exp-co">Outlier &middot; Contract</div>
         <div class="exp-desc">Analyzed and ranked AI model outputs to identify errors, reasoning flaws, and safety violations (RLHF)</div>
       </div>
-    </div>
 
-    <div class="exp-item">
-      <div class="exp-date">2024 &mdash; 2025</div>
-      <div>
+      <div class="exp-item slide-in-left">
+        <div class="exp-date">2024 // 2025</div>
         <div class="exp-role">UGC Creator</div>
         <div class="exp-co">Seedify</div>
-        <div class="exp-desc">Produced written and video content for Web3 AI agents and blockchain games, collaborating cross-functionally on brand strategy</div>
+        <div class="exp-desc">Produced written and video content for Web3 AI agents and blockchain games, collaborating on brand strategy</div>
       </div>
-    </div>
 
-    <div class="exp-item">
-      <div class="exp-date">2022 &mdash; 2024</div>
-      <div>
+      <div class="exp-item slide-in-left">
+        <div class="exp-date">2022 // 2024</div>
         <div class="exp-role">Head of Collaboration &amp; Research</div>
         <div class="exp-co">Gemsora DAO</div>
-        <div class="exp-desc">Led partnerships with gaming projects, managed community engagement on Discord, and directed research for content strategy and project evaluation</div>
+        <div class="exp-desc">Led partnerships with gaming projects, managed community engagement, and directed research for content strategy</div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="runway"><span class="runway-label">ILS 09</span></div>
 
 <section id="certs">
-  <div class="container">
-    <h2 class="section-title">Certifications &amp; Training</h2>
+  <div class="container fade-in">
+    <h2 class="section-title"><span class="tag">FPL</span> Certifications</h2>
 
-    <div class="skill-group-label" style="margin-top:.5rem">Computer Science &amp; AI</div>
-
-    <div class="edu-item">
-      <div class="edu-title">CS50x: Introduction to Computer Science <span class="badge badge--done">2026</span></div>
-      <div class="edu-meta">Harvard University</div>
+    <div class="cert-group">
+      <div class="cert-group-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/></svg>
+        Aviation
+      </div>
+      <div class="cert-item slide-in-left">
+        <span class="cert-title">Advanced Flight Dispatch</span>
+        <span class="cert-meta">Lagos Aviation Academy // 2026</span>
+      </div>
+      <div class="cert-item slide-in-left">
+        <span class="cert-title">Basic Flight Dispatch</span>
+        <span class="cert-meta">Lagos Aviation Academy // 2025</span>
+      </div>
+      <div class="cert-item slide-in-left">
+        <span class="cert-title">NAFI Performance Charts Case Studies</span>
+        <span class="cert-meta">FAA Safety Team // 2026</span>
+      </div>
     </div>
 
-    <div class="edu-item">
-      <div class="edu-title">CS50p: Introduction to Programming with Python <span class="badge badge--done">2026</span></div>
-      <div class="edu-meta">Harvard University</div>
+    <div class="cert-group">
+      <div class="cert-group-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z" fill="currentColor"/></svg>
+        Computer Science &amp; AI
+      </div>
+      <div class="cert-item slide-in-left">
+        <span class="cert-title">CS50x: Introduction to Computer Science</span>
+        <span class="cert-meta">Harvard University // 2026</span>
+      </div>
+      <div class="cert-item slide-in-left">
+        <span class="cert-title">CS50p: Introduction to Programming with Python</span>
+        <span class="cert-meta">Harvard University // 2026</span>
+      </div>
+      <div class="cert-item slide-in-left">
+        <span class="cert-title">AI Fluency Framework &amp; Foundations</span>
+        <span class="cert-meta">Anthropic // 2026</span>
+      </div>
     </div>
 
-    <div class="edu-item">
-      <div class="edu-title">Claude 101 <span class="badge badge--done">2026</span></div>
-      <div class="edu-meta">Anthropic</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">AI Fluency Framework &amp; Foundations <span class="badge badge--done">2026</span></div>
-      <div class="edu-meta">Anthropic</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">Data Analytics <span class="badge badge--done">2023</span></div>
-      <div class="edu-meta">ALX Africa</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">Python Programming <span class="badge badge--done">2020</span></div>
-      <div class="edu-meta">Ladoke Akintola University of Technology</div>
-    </div>
-
-    <div class="skill-group-label" style="margin-top:1.5rem">Aviation</div>
-
-    <div class="edu-item">
-      <div class="edu-title">Advanced Flight Dispatch <span class="badge badge--done">2026</span></div>
-      <div class="edu-meta">Lagos Aviation Academy</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">Basic Flight Dispatch <span class="badge badge--done">2025</span></div>
-      <div class="edu-meta">Lagos Aviation Academy</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">NAFI &mdash; Performance Charts Case Studies <span class="badge badge--done">2026</span></div>
-      <div class="edu-meta">FAA Safety Team (FAASTeam)</div>
-    </div>
-
-    <div class="skill-group-label" style="margin-top:1.5rem">3D, Animation &amp; Creative</div>
-
-    <div class="edu-item">
-      <div class="edu-title">C++ for Game Development <span class="badge badge--done">2025</span></div>
-      <div class="edu-meta">Udemy</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">This Is Animation <span class="badge badge--done">2025</span></div>
-      <div class="edu-meta">Sony Pictures Animation</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">After Effects Foundation <span class="badge badge--done">2025</span></div>
-      <div class="edu-meta">School of Motion</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">Cinematography <span class="badge badge--done">2024</span></div>
-      <div class="edu-meta">Praxis Digital Academy</div>
-    </div>
-
-    <div class="edu-item">
-      <div class="edu-title">Introduction to Animation &amp; Post Production <span class="badge badge--done">2024</span></div>
-      <div class="edu-meta">YAPPI Nigeria</div>
+    <div class="cert-group">
+      <div class="cert-group-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 6H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1zm-1 10H4V8h16v8z" fill="currentColor"/></svg>
+        Creative &amp; Engineering
+      </div>
+      <div class="cert-item slide-in-left">
+        <span class="cert-title">C++ for Game Development</span>
+        <span class="cert-meta">Udemy // 2025</span>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<section id="projects">
-  <div class="container">
-    <h2 class="section-title">Featured Projects</h2>
-    <div class="projects-grid">
-
-      <div class="project-card">
-        <h3>Live Flight Tracker</h3>
-        <p>Real-time aircraft tracking over any location on Earth. Pulls live ADS-B data from the OpenSky Network, geocodes via Nominatim, and outputs callsign, altitude, speed, and registration country.</p>
-        <a href="./projects/flight-tracker.html">View Project &#8594;</a>
-      </div>
-
-      <div class="project-card">
-        <h3>Drone Mission Planner</h3>
-        <p>Pre-flight feasibility calculator for autonomous drone delivery missions. Computes distance, round-trip flight time, battery requirements, and go/no-go decisions before takeoff.</p>
-        <a href="./projects/drone-mission-planner.html">View Project &#8594;</a>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
+<div class="runway"><span class="runway-label">TWY C</span></div>
 
 <section id="focus">
-  <div class="container">
-    <h2 class="section-title">Current Focus</h2>
+  <div class="container fade-in">
+    <h2 class="section-title"><span class="tag">ATIS</span> Current Focus</h2>
     <ul class="focus-list">
       <li>Building architectural visualization portfolio using Unreal Engine 5</li>
       <li>Strengthening mathematics foundation (Algebra through Calculus)</li>
@@ -362,12 +415,100 @@ body{padding-top:3rem}
   </div>
 </section>
 
+<!-- Compass -->
+<div class="compass-container">
+  <svg class="compass" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="30" cy="30" r="28" fill="none" stroke="rgba(0,255,65,.15)" stroke-width="1"/>
+    <circle cx="30" cy="30" r="20" fill="none" stroke="rgba(0,255,65,.1)" stroke-width="1"/>
+    <line x1="30" y1="2" x2="30" y2="12" stroke="rgba(0,255,65,.3)" stroke-width="1.5"/>
+    <line x1="30" y1="48" x2="30" y2="58" stroke="rgba(0,255,65,.15)" stroke-width="1"/>
+    <line x1="2" y1="30" x2="12" y2="30" stroke="rgba(0,255,65,.15)" stroke-width="1"/>
+    <line x1="48" y1="30" x2="58" y2="30" stroke="rgba(0,255,65,.15)" stroke-width="1"/>
+    <text x="30" y="10" text-anchor="middle" fill="rgba(0,255,65,.4)" font-size="6" font-family="monospace">N</text>
+    <polygon points="30,16 27,24 33,24" fill="rgba(0,255,65,.25)"/>
+  </svg>
+</div>
+
 <footer>
   <div class="container">
-    <p>Daniel Ayobamidele Grace &mdash; Creative Grace &mdash; 2026</p>
-    <a href="./contact.html">Get in Touch &#8594;</a>
+    <p>Daniel Ayobamidele Grace // Creative Grace // 2026</p>
+    <a href="./contact.html" class="cta-link">Get in Touch &#8594;</a>
   </div>
 </footer>
+
+<script>
+// Typing animation
+(function(){
+  var phrases = [
+    'Software Engineer | Aerospace Systems | 3D Visualization',
+    'Flight Dispatch | Satellite Systems | Game Development',
+    'Python | C/C++ | Unreal Engine 5'
+  ];
+  var el = document.getElementById('typed-subtitle');
+  var phraseIdx = 0, charIdx = 0, deleting = false, pause = 0;
+
+  function type() {
+    var current = phrases[phraseIdx];
+    if (pause > 0) { pause--; requestAnimationFrame(function(){ setTimeout(type, 50); }); return; }
+
+    if (!deleting) {
+      charIdx++;
+      if (charIdx > current.length) { pause = 40; deleting = true; }
+    } else {
+      charIdx--;
+      if (charIdx < 0) { charIdx = 0; deleting = false; phraseIdx = (phraseIdx + 1) % phrases.length; pause = 10; }
+    }
+    el.innerHTML = current.substring(0, charIdx) + '<span class="cursor">|</span>';
+    setTimeout(type, deleting ? 30 : 55);
+  }
+  setTimeout(type, 800);
+})();
+
+// Stat counter animation
+(function(){
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el = e.target;
+      var target = parseInt(el.getAttribute('data-target'));
+      var count = 0;
+      var step = Math.max(1, Math.floor(target / 30));
+      var iv = setInterval(function(){
+        count += step;
+        if(count >= target){ count = target; clearInterval(iv); }
+        el.textContent = count;
+      }, 40);
+      observer.unobserve(el);
+    });
+  }, {threshold:0.5});
+  document.querySelectorAll('.stat-num').forEach(function(el){ observer.observe(el); });
+})();
+
+// Scroll reveal
+(function(){
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+    });
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.fade-in,.slide-in-left').forEach(function(el){obs.observe(el);});
+})();
+
+// 3D card tilt
+function tiltCard(e, card) {
+  var rect = card.getBoundingClientRect();
+  var x = e.clientX - rect.left;
+  var y = e.clientY - rect.top;
+  var centerX = rect.width / 2;
+  var centerY = rect.height / 2;
+  var rotateX = (y - centerY) / centerY * -4;
+  var rotateY = (x - centerX) / centerX * 4;
+  card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.01)';
+}
+function resetCard(card) {
+  card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+}
+</script>
 
 </body>
 </html>
