@@ -3,819 +3,243 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daniel's 14-Day Plan</title>
+<title>Daniel Ayobamidele Grace — Software Engineer</title>
+<meta name="description" content="Portfolio of Daniel Ayobamidele Grace — Software Engineer, Aerospace Systems, 3D Visualization.">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--surface:#141720;--accent:#4f8ef7;--orange:#f97316;
+  --green:#22c55e;--purple:#a855f7;--text:#e2e8f0;--muted:#64748b;
+  --border:#1e2433;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'SF Mono','Cascadia Code','Consolas',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none;transition:opacity .2s}
+a:hover{opacity:.8}
 
-  :root {
-    --bg: #0d0f14;
-    --surface: #141720;
-    --surface2: #1c2030;
-    --border: #252a3a;
-    --accent-blue: #4f8ef7;
-    --accent-orange: #f97316;
-    --accent-green: #22c55e;
-    --accent-purple: #a855f7;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --math-color: #f97316;
-    --arch-color: #4f8ef7;
-    --complete-color: #22c55e;
-  }
+/* Layout */
+.container{max-width:800px;margin:0 auto;padding:0 1.25rem}
+section{padding:4rem 0}
+.divider{height:1px;background:var(--border);margin:0 auto;max-width:800px}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* Hero */
+.hero{padding:6rem 0 4rem;text-align:center}
+.hero h1{font-size:clamp(1.75rem,5vw,2.5rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem}
+.hero .subtitle{color:var(--muted);font-size:1.05rem;margin-bottom:.25rem}
+.hero .location{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.hero-links{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem 1.25rem}
+.hero-links a{font-size:.9rem;display:inline-flex;align-items:center;gap:.35rem}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Space Grotesk', sans-serif;
-    min-height: 100vh;
-    padding: 24px 16px 48px;
-  }
+/* Section headings */
+.section-title{font-size:1.35rem;font-weight:600;margin-bottom:1.5rem;letter-spacing:-.01em;position:relative;padding-bottom:.5rem}
+.section-title::after{content:'';position:absolute;bottom:0;left:0;width:2rem;height:2px;background:var(--accent)}
 
-  .header {
-    text-align: center;
-    margin-bottom: 32px;
-  }
+/* About */
+.about p{color:var(--text);line-height:1.8;font-size:.95rem}
 
-  .header .label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
+/* Skills */
+.skill-group{margin-bottom:1.25rem}
+.skill-group-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem;font-weight:600}
+.pills{display:flex;flex-wrap:wrap;gap:.4rem}
+.pill{background:var(--surface);border:1px solid var(--border);border-radius:9999px;padding:.3rem .8rem;font-size:.8rem;color:var(--text);white-space:nowrap}
 
-  .header h1 {
-    font-size: clamp(22px, 5vw, 36px);
-    font-weight: 700;
-    line-height: 1.1;
-  }
+/* Education */
+.edu-item{padding:.75rem 0;border-bottom:1px solid var(--border)}
+.edu-item:last-child{border-bottom:none}
+.edu-title{font-weight:600;font-size:.95rem}
+.edu-meta{color:var(--muted);font-size:.85rem}
+.badge{display:inline-block;font-size:.7rem;padding:.15rem .5rem;border-radius:9999px;font-weight:600;margin-left:.5rem;vertical-align:middle}
+.badge--progress{background:rgba(79,142,247,.15);color:var(--accent)}
+.badge--done{background:rgba(34,197,94,.12);color:var(--green)}
 
-  .header h1 span.blue { color: var(--accent-blue); }
-  .header h1 span.orange { color: var(--accent-orange); }
+/* Project cards */
+.projects-grid{display:grid;gap:1rem}
+.project-card{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;padding:1.25rem 1.5rem;transition:border-color .2s,transform .2s}
+.project-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.project-card h3{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.project-card p{color:var(--muted);font-size:.875rem;margin-bottom:.75rem;line-height:1.6}
+.project-card a{font-size:.85rem;font-weight:500}
 
-  .header .sub {
-    margin-top: 10px;
-    color: var(--muted);
-    font-size: 14px;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+/* Current focus */
+.focus-list{list-style:none;padding:0}
+.focus-list li{position:relative;padding-left:1.25rem;margin-bottom:.6rem;font-size:.95rem;color:var(--text)}
+.focus-list li::before{content:'\203A';position:absolute;left:0;color:var(--accent);font-weight:700}
 
-  /* Legend */
-  .legend {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
+/* Footer */
+footer{padding:2.5rem 0;text-align:center;border-top:1px solid var(--border)}
+footer p{color:var(--muted);font-size:.85rem;margin-bottom:.35rem}
+footer a{font-size:.85rem}
 
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-  }
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,15,20,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.65rem 0;transition:transform .3s}
+.nav .container{display:flex;justify-content:space-between;align-items:center}
+.nav-name{font-weight:600;font-size:.9rem;color:var(--text)}
+.nav-links{display:flex;gap:1rem}
+.nav-links a{color:var(--muted);font-size:.8rem;transition:color .2s}
+.nav-links a:hover{color:var(--text);opacity:1}
+body{padding-top:3rem}
 
-  .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .dot.math { background: var(--math-color); }
-  .dot.arch { background: var(--arch-color); }
-  .dot.rest { background: var(--accent-purple); }
-
-  /* Week header */
-  .week-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin: 28px 0 12px;
-    padding-left: 4px;
-  }
-
-  /* Day card */
-  .day-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-
-  .day-card:hover { border-color: var(--accent-blue); }
-  .day-card.done { border-color: var(--complete-color); opacity: 0.75; }
-
-  .day-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    user-select: none;
-  }
-
-  .day-number {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    min-width: 36px;
-  }
-
-  .day-title {
-    flex: 1;
-    font-weight: 600;
-    font-size: 15px;
-  }
-
-  .day-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-size: 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  .tag.math { background: rgba(249,115,22,0.15); color: var(--math-color); }
-  .tag.arch { background: rgba(79,142,247,0.15); color: var(--arch-color); }
-  .tag.rest { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
-
-  .chevron {
-    color: var(--muted);
-    font-size: 12px;
-    transition: transform 0.2s;
-    flex-shrink: 0;
-  }
-
-  .day-card.open .chevron { transform: rotate(180deg); }
-
-  .day-body {
-    display: none;
-    padding: 0 16px 16px;
-    border-top: 1px solid var(--border);
-  }
-
-  .day-card.open .day-body { display: block; }
-
-  .section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin: 14px 0 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-label.math-label { color: var(--math-color); }
-  .section-label.arch-label { color: var(--arch-color); }
-  .section-label.note-label { color: var(--accent-purple); }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .task-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .task-list li {
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.5;
-    padding-left: 16px;
-    position: relative;
-  }
-
-  .task-list li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--muted);
-    font-size: 11px;
-    top: 2px;
-  }
-
-  .math-block {
-    background: rgba(249,115,22,0.06);
-    border-left: 3px solid var(--math-color);
-    border-radius: 0 6px 6px 0;
-    padding: 10px 12px;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  .arch-block {
-    background: rgba(79,142,247,0.06);
-    border-left: 3px solid var(--arch-color);
-    border-radius: 0 6px 6px 0;
-    padding: 10px 12px;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  .note-block {
-    background: rgba(168,85,247,0.06);
-    border-left: 3px solid var(--accent-purple);
-    border-radius: 0 6px 6px 0;
-    padding: 10px 12px;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #c4b5fd;
-  }
-
-  .time-badge {
-    display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 7px;
-    color: var(--muted);
-    margin-left: 8px;
-  }
-
-  /* Progress */
-  .progress-bar-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 28px;
-  }
-
-  .progress-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .progress-top span {
-    font-size: 13px;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .progress-top strong {
-    font-size: 15px;
-    color: var(--complete-color);
-  }
-
-  .bar-bg {
-    background: var(--surface2);
-    border-radius: 99px;
-    height: 8px;
-    overflow: hidden;
-  }
-
-  .bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-    border-radius: 99px;
-    transition: width 0.4s ease;
-  }
-
-  .complete-btn {
-    margin-top: 14px;
-    width: 100%;
-    padding: 9px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .complete-btn:hover { border-color: var(--complete-color); color: var(--complete-color); }
-  .day-card.done .complete-btn { background: rgba(34,197,94,0.1); color: var(--complete-color); border-color: var(--complete-color); }
-
-  .resource-link {
-    color: var(--accent-blue);
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 4px;
-  }
-
-  .resource-link:hover { text-decoration: underline; }
-
-  .milestone {
-    background: linear-gradient(135deg, rgba(79,142,247,0.1), rgba(168,85,247,0.1));
-    border: 1px solid rgba(79,142,247,0.3);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin: 16px 0 0;
-    font-size: 13px;
-    color: #93c5fd;
-    line-height: 1.5;
-  }
-
-  .milestone strong { color: var(--accent-blue); }
+@media(max-width:600px){
+  .hero{padding:4rem 0 3rem}
+  section{padding:3rem 0}
+  .nav-links{gap:.6rem}
+  .nav-links a{font-size:.75rem}
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="label">Daniel Ayobamidele Grace · Aug 1 – Aug 14, 2026</div>
-  <h1><span class="orange">Math</span> + <span class="blue">Archviz</span><br>14-Day Launch Plan</h1>
-  <p class="sub">4-5 hours daily. Math in the morning. Unreal Engine archviz in the afternoon. Both feeding each other.</p>
-</div>
-
-<div class="legend">
-  <div class="legend-item"><div class="dot math"></div> Math (1-1.5 hrs)</div>
-  <div class="legend-item"><div class="dot arch"></div> Archviz / Unreal (3-3.5 hrs)</div>
-  <div class="legend-item"><div class="dot rest"></div> Notes / Bridge</div>
-</div>
-
-<div class="progress-bar-wrap">
-  <div class="progress-top">
-    <span>Progress</span>
-    <strong id="progress-text">0 / 14 days</strong>
+<nav class="nav">
+  <div class="container">
+    <span class="nav-name">DAG</span>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#projects">Projects</a>
+      <a href="#focus">Focus</a>
+    </div>
   </div>
-  <div class="bar-bg">
-    <div class="bar-fill" id="progress-fill" style="width:0%"></div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>Daniel Ayobamidele Grace</h1>
+    <p class="subtitle">Software Engineer | Aerospace Systems | 3D Visualization</p>
+    <p class="location">Lagos, Nigeria</p>
+    <div class="hero-links">
+      <a href="https://github.com/DrDanielGrace" target="_blank" rel="noopener">[GitHub]</a>
+      <a href="https://www.linkedin.com/in/danielayobamideleojo/" target="_blank" rel="noopener">[LinkedIn]</a>
+      <a href="https://x.com/DrDanielCGrace" target="_blank" rel="noopener">[X / Twitter]</a>
+      <a href="mailto:ayobamideledanielojo@gmail.com">[Email]</a>
+    </div>
   </div>
-</div>
+</header>
 
-<div class="week-label">Week 1 — Foundation</div>
+<div class="divider"></div>
 
-<!-- DAY 1 -->
-<div class="day-card" id="day-1">
-  <div class="day-header" onclick="toggleDay(1)">
-    <span class="day-number">DAY 01</span>
-    <span class="day-title">Setup + Algebra Foundations + First Archviz Scene</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">About</h2>
+    <div class="about">
+      <p>
+        I am a computer science student at the University of the People, studying through Harvard's CS50 series (CS50x, CS50p, CS50 AI) and pursuing applied data science at WorldQuant University. My interests span flight software engineering, satellite systems, autonomous drones, 3D architectural visualization, and game development. My long-term goal is to contribute to indigenous satellite launches from Nigeria and pursue an MS/PhD in Aerospace Engineering.
+      </p>
     </div>
-    <span class="chevron">▼</span>
   </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Resume Algebra 1 from where you stopped. Today's focus is variables and expressions. Write out every example by hand, not just watch. The habit of writing matters. Ask yourself: "what is this expression actually describing in the real world?" That question will matter later.
+</section>
+
+<div class="divider"></div>
+
+<section id="skills">
+  <div class="container">
+    <h2 class="section-title">Skills</h2>
+
+    <div class="skill-group">
+      <div class="skill-group-label">Languages</div>
+      <div class="pills">
+        <span class="pill">Python</span>
+        <span class="pill">C</span>
+        <span class="pill">C++</span>
+        <span class="pill">HTML/CSS</span>
+        <span class="pill">SQL</span>
+      </div>
     </div>
 
-    <div class="section-label arch-label">Afternoon — Unreal Archviz Setup <span class="time-badge">3-3.5 hrs</span></div>
-    <div class="arch-block">
-      Install Twinmotion from Epic Games Launcher. Also open Fab.com in browser and download 2-3 free interior asset packs (search "interior architecture free"). Watch William Faucher's "Unreal Engine 5 Archviz for Beginners" intro video on YouTube. Then open Unreal Engine 5, create a new blank project, and just place one room with walls, a floor, and one light source. Nothing fancy. Just get a scene rendering today.
+    <div class="skill-group">
+      <div class="skill-group-label">Tools</div>
+      <div class="pills">
+        <span class="pill">Unreal Engine 5</span>
+        <span class="pill">Twinmotion</span>
+        <span class="pill">Git / GitHub</span>
+        <span class="pill">VS Code</span>
+      </div>
     </div>
 
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Variables in algebra (x, y) are the same thing as parameters in Unreal Engine. When you set a room width to "5 meters" that 5 is a variable. Start seeing math and engine work as the same language.
+    <div class="skill-group">
+      <div class="skill-group-label">Domains</div>
+      <div class="pills">
+        <span class="pill">Flight Software</span>
+        <span class="pill">Satellite Systems</span>
+        <span class="pill">Autonomous Navigation</span>
+        <span class="pill">3D Archviz</span>
+        <span class="pill">AI / ML</span>
+      </div>
     </div>
-
-    <button class="complete-btn" onclick="markDone(1)">Mark Day Complete</button>
   </div>
-</div>
+</section>
 
-<!-- DAY 2 -->
-<div class="day-card" id="day-2">
-  <div class="day-header" onclick="toggleDay(2)">
-    <span class="day-number">DAY 02</span>
-    <span class="day-title">Equations + Lumen Lighting Basics</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
+<div class="divider"></div>
+
+<section id="education">
+  <div class="container">
+    <h2 class="section-title">Education &amp; Certifications</h2>
+
+    <div class="edu-item">
+      <div class="edu-title">BS Computer Science <span class="badge badge--progress">In Progress</span></div>
+      <div class="edu-meta">University of the People</div>
     </div>
-    <span class="chevron">▼</span>
+
+    <div class="edu-item">
+      <div class="edu-title">CS50x: Introduction to Computer Science <span class="badge badge--done">2026</span></div>
+      <div class="edu-meta">Harvard University</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">CS50p: Introduction to Programming with Python</div>
+      <div class="edu-meta">Harvard University</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Applied Data Science Lab <span class="badge badge--progress">In Progress</span></div>
+      <div class="edu-meta">WorldQuant University</div>
+    </div>
   </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Linear equations, one variable. Solve 10 problems by hand. Focus on what "solving for x" actually means physically. If x is the unknown wall length, what equation describes it?
-    </div>
+</section>
 
-    <div class="section-label arch-label">Afternoon — Lumen Lighting <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Watch William Faucher "Lumen Lighting in UE5" tutorial. Then in your scene from Day 1, enable Lumen in Project Settings. Add a Directional Light (sun), a Sky Light, and one interior Rect Light to simulate a window. Adjust intensity values. Notice how changing the number changes the feel. Screenshot your best result.
-    </div>
+<div class="divider"></div>
 
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Light intensity in Unreal is measured in Lux or Candela, which are real physics units. Sunlight is around 100,000 Lux. A living room lamp is around 300 Lux. Your equation today: if you want a room to feel like 3pm sunlight, what intensity value do you input? That is applied math.
-    </div>
+<section id="projects">
+  <div class="container">
+    <h2 class="section-title">Featured Projects</h2>
+    <div class="projects-grid">
 
-    <button class="complete-btn" onclick="markDone(2)">Mark Day Complete</button>
+      <div class="project-card">
+        <h3>Live Flight Tracker</h3>
+        <p>CS50p final project. A Python-based real-time flight tracking application.</p>
+        <a href="https://github.com/DrDanielGrace/My-Flight-Software-Engineering-Learning/tree/main/Live_Flight_Tracker_cs50p_final_project" target="_blank" rel="noopener">View on GitHub &#8594;</a>
+      </div>
+
+      <div class="project-card">
+        <h3>CS50x Final Project</h3>
+        <p>Harvard CS50x capstone project.</p>
+        <a href="https://github.com/DrDanielGrace/My-Flight-Software-Engineering-Learning/tree/main/cs50x_final_project" target="_blank" rel="noopener">View on GitHub &#8594;</a>
+      </div>
+
+    </div>
   </div>
-</div>
+</section>
 
-<!-- DAY 3 -->
-<div class="day-card" id="day-3">
-  <div class="day-header" onclick="toggleDay(3)">
-    <span class="day-number">DAY 03</span>
-    <span class="day-title">Graphing + Materials and Surfaces</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
+<div class="divider"></div>
+
+<section id="focus">
+  <div class="container">
+    <h2 class="section-title">Current Focus</h2>
+    <ul class="focus-list">
+      <li>Building architectural visualization portfolio using Unreal Engine 5</li>
+      <li>Strengthening mathematics foundation (Algebra through Calculus)</li>
+      <li>Pursuing flight software engineering specialization</li>
+    </ul>
   </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Graphing linear equations. Plot 5 lines on paper. Understand slope (rise over run). What does a steep slope look like vs a gentle one? You will use this when animating camera movements in Unreal.
-    </div>
+</section>
 
-    <div class="section-label arch-label">Afternoon — Quixel Materials <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Open Quixel Bridge inside Unreal Engine (it is built in, top menu). Download 5 free surface materials: wood floor, white wall paint, concrete, glass, and a fabric or curtain material. Apply them to surfaces in your room. Focus on the Roughness and Metallic sliders in the material editor. Roughness = 0 is a mirror. Roughness = 1 is completely matte. Experiment with every surface until the room looks like a real interior.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Roughness and Metallic values in Unreal go from 0.0 to 1.0. That is a number line. Graphing where different materials sit on that line (glass at 0.0 roughness, concrete at 0.8 roughness) is literally plotting points on a graph.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(3)">Mark Day Complete</button>
+<footer>
+  <div class="container">
+    <p>Daniel Ayobamidele Grace &mdash; 2026</p>
+    <a href="./plans/14day.html">View my 14-Day Launch Plan</a>
   </div>
-</div>
-
-<!-- DAY 4 -->
-<div class="day-card" id="day-4">
-  <div class="day-header" onclick="toggleDay(4)">
-    <span class="day-number">DAY 04</span>
-    <span class="day-title">Systems of Equations + Camera and Composition</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Systems of two equations. Two unknowns, two equations, one solution. Think of it as finding the exact point where two lines cross. In 3D space, every object has an X and Y coordinate. A system of equations finds where two objects or paths meet.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Cinecamera Setup <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Add a CineCamera Actor to your scene. Set Focal Length to 24mm for wide interior shots. Set Aperture (f-stop) to f/2.8 for a shallow depth of field effect. Place the camera at human eye level (around 160cm height). Frame a corner of the room using the rule of thirds. Watch one short video on "architectural photography composition" on YouTube to understand what clients expect to see. Take 3 different camera angles of your room and compare them.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Camera position in Unreal is X, Y, Z coordinates. Moving a camera from one point to another is literally solving for where two coordinate values meet. Your systems of equations practice is giving you the mental model for 3D spatial reasoning.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(4)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 5 -->
-<div class="day-card" id="day-5">
-  <div class="day-header" onclick="toggleDay(5)">
-    <span class="day-number">DAY 05</span>
-    <span class="day-title">Inequalities + Furniture and Asset Placement</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Inequalities and their graphs. Greater than, less than. This is about ranges, not exact values. A sofa must be less than 3 meters wide to fit in a room. The room temperature must stay between 18 and 26 degrees. Inequalities describe real constraints.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Full Room Build <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Today you build your first complete room. Go to Fab.com or Sketchfab and download a free furniture pack. Place a sofa, a coffee table, a TV unit, a floor lamp, and some decorative items. Think about spacing: furniture should not touch walls, allow walking paths of at least 90cm. Add curtains or blinds to your window opening. Add a rug under the sofa. By end of day your scene should look like a real living room someone could move into.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Furniture spacing constraints are inequalities. "The gap between sofa and TV must be more than 2 meters for comfortable viewing" is literally: gap > 2. You are solving interior design with algebra.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(5)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 6 -->
-<div class="day-card" id="day-6">
-  <div class="day-header" onclick="toggleDay(6)">
-    <span class="day-number">DAY 06</span>
-    <span class="day-title">Review Week + First Render Output</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math Review <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Do the Algebra 1 unit test or practice quiz for everything covered so far. Write down any topic you got wrong and note it for next week. This is not punishment, it is data about where your edge is.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — High Quality Render <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Today you output your first proper render. In Unreal, go to Movie Render Queue (or High Resolution Screenshot). Set output resolution to 3840x2160 (4K). Enable Path Tracing in the render settings for maximum quality. Let it render your best camera angle. This will take time depending on your GPU, so set it going and do your math while it renders. When done, open the image. This is your first portfolio piece. Save it somewhere safe.
-    </div>
-
-    <div class="milestone">
-      <strong>Week 1 Milestone:</strong> You have a complete furnished room rendered at 4K with proper lighting, materials, and camera composition. That is a real portfolio piece. The math you did this week (variables, equations, graphs, inequalities) all showed up in real decisions you made in Unreal.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(6)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 7 -->
-<div class="day-card" id="day-7">
-  <div class="day-header" onclick="toggleDay(7)">
-    <span class="day-number">DAY 07</span>
-    <span class="day-title">Rest Day / Light Review</span>
-    <div class="day-tags">
-      <span class="tag rest">Rest</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label note-label">Today's Instruction</div>
-    <div class="note-block">
-      Do not open Unreal Engine today. Do not do Khan Academy today. Rest is not optional when you are building something serious. If you want to do something, watch one archviz inspiration video on YouTube or Behance, just to see what professional work looks like. Let your brain absorb the week. Come back tomorrow sharper.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(7)">Mark Day Complete</button>
-  </div>
-</div>
-
-<div class="week-label">Week 2 — Intermediate Skills + Portfolio Ready</div>
-
-<!-- DAY 8 -->
-<div class="day-card" id="day-8">
-  <div class="day-header" onclick="toggleDay(8)">
-    <span class="day-number">DAY 08</span>
-    <span class="day-title">Functions + Exterior Scene Begins</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Introduction to functions. f(x) means: give me an input, I will give you an output. A render pipeline is a function. Give it a scene, it outputs an image. Your Python trading bot will be a function. Master this concept. Do 15 practice problems.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Start an Exterior Scene <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Start a new project. This time build the outside of a building. Use Unreal's landscape tools to create a simple flat ground. Add a building facade using basic geometry or a downloaded free model from Fab. Add trees and plants from Quixel Bridge (search "grass", "tree", "shrub"). Set up a sky with UE5's Sky Atmosphere and Volumetric Clouds. Get a realistic golden hour sun by rotating your Directional Light to a low angle. Exterior scenes are what Nigerian and international real estate developers actually want to show buyers first.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      The Sun's position in your scene is controlled by angles. Rotating the Directional Light by degrees is trigonometry. You are not there yet in math but you are already using it intuitively.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(8)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 9 -->
-<div class="day-card" id="day-9">
-  <div class="day-header" onclick="toggleDay(9)">
-    <span class="day-number">DAY 09</span>
-    <span class="day-title">Function Graphs + Walkthrough Animation</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Graphing functions. Understand how input values produce a curve, not just a line. Animation curves in Unreal Engine work exactly this way: the shape of the curve determines how fast or slow something moves. An "ease in" curve is a specific mathematical function shape.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Sequencer Walkthrough <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Open Unreal Sequencer (Cinematics menu). Create a Level Sequence. Add your CineCamera to the sequence. Set a keyframe at the start position and another keyframe 5 seconds later at a different position. Press play. The camera moves between them. Now right-click the keyframe curve and change it from Linear to Ease In/Ease Out. See how the motion feels more cinematic. Spend the rest of the session building a 15-30 second walkthrough of your exterior scene. This is a deliverable you can show clients.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(9)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 10 -->
-<div class="day-card" id="day-10">
-  <div class="day-header" onclick="toggleDay(10)">
-    <span class="day-number">DAY 10</span>
-    <span class="day-title">Ratios and Proportions + Scale and Accuracy</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Ratios, rates, and proportions. If a real building is 10 meters tall and your Unreal scene is in centimeters, that building must be 1000 units tall. Getting scale right is pure proportional math. A room that looks "off" is usually wrong scale.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Accurate Scale + Python Mini Script <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      First, go through your Week 1 room scene and check scale. Is the door 210cm tall? Is the sofa 85cm high? Is the ceiling 270cm? Fix anything that looks wrong using the Transform panel. Then, write a tiny Python script (10-15 lines) that takes a real-world measurement in meters and converts it to Unreal units (centimeters). Run it in VS Code. This is your first bridge between coding, math, and Unreal. Save the script to your GitHub.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      This Python script is literally a function. Input: meters. Output: centimeters. f(x) = x * 100. You wrote math as code. This is exactly what you will do in aerospace simulation and in trading bots. Same skill, different domain.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(10)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 11 -->
-<div class="day-card" id="day-11">
-  <div class="day-header" onclick="toggleDay(11)">
-    <span class="day-number">DAY 11</span>
-    <span class="day-title">Percentages + Twinmotion Explore + Client Pricing</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Percentages and their applications. If you charge a client $200 for a render and your software or asset license costs you $30, your profit margin is 85%. If you want a 70% profit margin and your costs are $60, what should you charge? This is the business math you actually need to run this as income.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Twinmotion + Pricing Research <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Open Twinmotion (you installed it day one). Import a simple floor plan image as a reference. Build a quick room in Twinmotion to compare the workflow with Unreal. Twinmotion is faster to get started but less powerful. Unreal gives better quality. Understanding both means you can choose the right tool per client. Spend the last hour researching what archviz freelancers charge on Fiverr and Upwork. Note the range. Write down three price points you could offer: a basic package, a standard package, and a premium package.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(11)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 12 -->
-<div class="day-card" id="day-12">
-  <div class="day-header" onclick="toggleDay(12)">
-    <span class="day-number">DAY 12</span>
-    <span class="day-title">Algebra Review + Full Project from Floor Plan</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Do a full mixed review of everything from the past two weeks. Variables, equations, graphs, functions, ratios, percentages. Flag anything you are still shaky on. You are building a foundation. Gaps now become problems later in trigonometry and calculus.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Real Floor Plan Project <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Go to architecturaldesigns.com or houseplans.com and find a free simple house plan. A 2-bedroom or 3-bedroom layout works well. Build this layout inside Unreal Engine from scratch using the dimensions shown. Every wall, every door opening, every window. This is your most important practical exercise because it is exactly what a real client would send you. Do not try to furnish all of it today, just build the shell accurately.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(12)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 13 -->
-<div class="day-card" id="day-13">
-  <div class="day-header" onclick="toggleDay(13)">
-    <span class="day-number">DAY 13</span>
-    <span class="day-title">Applied Math + Full Scene Polish + Render</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math Applied <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Do not open Khan Academy today. Instead, write down 5 real math problems that came up during your 12 days of Unreal work. Room dimensions, light intensity values, camera angles, render resolution ratios, pricing calculations. Solve them. This is applied math, not textbook math. Both matter.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Portfolio Render Day <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Finish and polish your floor plan scene from Day 12. Add furniture to at least the main living area and master bedroom. Add lighting. Set up 3 camera angles. Then render all 3 at 4K using Movie Render Queue. Also render your exterior scene from Day 8. By end of today you have 4 high quality renders. That is a starter portfolio. Put them in a folder called "Portfolio V1."
-    </div>
-
-    <button class="complete-btn" onclick="markDone(13)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 14 -->
-<div class="day-card" id="day-14">
-  <div class="day-header" onclick="toggleDay(14)">
-    <span class="day-number">DAY 14</span>
-    <span class="day-title">Two Week Review + Plan Forward + First Client Move</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-      <span class="tag rest">Strategy</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Start the next Algebra 1 unit, whatever comes after where you are now. Just one session. You are not stopping math. You are keeping the momentum going into week three and beyond. Math is a long game. Keep the daily habit.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Launch Moves <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Three things today. First: create a simple portfolio PDF with your 4 renders, your name, and a contact email. Use Canva to make it look clean. Second: set up a Fiverr account or an Upwork profile with archviz as your service. Upload your renders. Write a short description of what you offer. Third: post your best render on LinkedIn with a caption about what you are building. Tag it with architecture and visualization and Unreal Engine. The point is not to get clients today. The point is to exist publicly in this space.
-    </div>
-
-    <div class="milestone">
-      <strong>14-Day Outcome:</strong> You have a portfolio with real renders, a profile on at least one freelance platform, and two weeks of consistent daily math. You understand how algebra shows up in a real working tool. Week 3 onwards: keep math going daily, take on your first paid project (even small), and start Algebra 2 or the next unit. WorldQuant can come back in week 3 as your evening rotation when you need an academic shift.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(14)">Mark Day Complete</button>
-  </div>
-</div>
-
-<script>
-  const state = JSON.parse(localStorage.getItem('daniel-plan') || '{}');
-
-  function updateProgress() {
-    const done = Object.values(state).filter(Boolean).length;
-    document.getElementById('progress-text').textContent = done + ' / 14 days';
-    document.getElementById('progress-fill').style.width = (done / 14 * 100) + '%';
-  }
-
-  function markDone(n) {
-    state['day' + n] = !state['day' + n];
-    localStorage.setItem('daniel-plan', JSON.stringify(state));
-    const card = document.getElementById('day-' + n);
-    const btn = card.querySelector('.complete-btn');
-    if (state['day' + n]) {
-      card.classList.add('done');
-      btn.textContent = 'Completed!';
-    } else {
-      card.classList.remove('done');
-      btn.textContent = 'Mark Day Complete';
-    }
-    updateProgress();
-  }
-
-  function toggleDay(n) {
-    const card = document.getElementById('day-' + n);
-    card.classList.toggle('open');
-  }
-
-  // Init state
-  for (let i = 1; i <= 14; i++) {
-    if (state['day' + i]) {
-      const card = document.getElementById('day-' + i);
-      card.classList.add('done');
-      card.querySelector('.complete-btn').textContent = 'Completed!';
-    }
-  }
-  updateProgress();
-</script>
+</footer>
 
 </body>
 </html>
