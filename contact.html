@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Daniel Grace</title>
+<meta name="description" content="Get in touch with Daniel Ayobamidele Grace — Creative Grace.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--surface:#141720;--accent:#4f8ef7;--orange:#f97316;
+  --green:#22c55e;--purple:#a855f7;--text:#e2e8f0;--muted:#64748b;
+  --border:#1e2433;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'SF Mono','Cascadia Code','Consolas',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;padding-top:3rem}
+a{color:var(--accent);text-decoration:none;transition:opacity .2s}
+a:hover{opacity:.8}
+
+.container{max-width:640px;margin:0 auto;padding:0 1.25rem}
+
+/* Nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,15,20,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.65rem 0}
+.nav .nav-inner{max-width:800px;margin:0 auto;padding:0 1.25rem;display:flex;justify-content:space-between;align-items:center}
+.nav-name{font-weight:600;font-size:.9rem;color:var(--text)}
+.nav-links{display:flex;gap:1rem}
+.nav-links a{color:var(--muted);font-size:.8rem;transition:color .2s}
+.nav-links a:hover{color:var(--text);opacity:1}
+
+/* Page header */
+.page-header{padding:5rem 0 2rem;text-align:center}
+.page-header h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem}
+.page-header p{color:var(--muted);font-size:.95rem;max-width:440px;margin:0 auto}
+
+/* Form */
+.form-section{padding:2rem 0 4rem}
+
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.4rem;font-weight:600}
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width:100%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:.5rem;
+  padding:.75rem 1rem;
+  font-family:var(--font);
+  font-size:.9rem;
+  color:var(--text);
+  outline:none;
+  transition:border-color .2s;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{border-color:var(--accent)}
+.form-group input::placeholder,
+.form-group textarea::placeholder{color:var(--muted);opacity:.6}
+.form-group textarea{resize:vertical;min-height:140px}
+.form-group select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.form-group select option{background:var(--surface);color:var(--text)}
+
+.submit-btn{
+  width:100%;
+  padding:.85rem;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:.5rem;
+  font-family:var(--font);
+  font-size:.95rem;
+  font-weight:600;
+  cursor:pointer;
+  transition:opacity .2s,transform .1s;
+  margin-top:.5rem;
+}
+.submit-btn:hover{opacity:.9}
+.submit-btn:active{transform:scale(.98)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Status messages */
+.form-status{
+  text-align:center;
+  padding:1.5rem;
+  border-radius:.5rem;
+  margin-top:1rem;
+  font-size:.9rem;
+  display:none;
+}
+.form-status.success{display:block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green)}
+.form-status.error{display:block;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:var(--orange)}
+
+/* Alt contact */
+.alt-contact{
+  text-align:center;
+  padding:2rem 0 3rem;
+  border-top:1px solid var(--border);
+  margin-top:2rem;
+}
+.alt-contact p{color:var(--muted);font-size:.85rem;margin-bottom:.75rem}
+.alt-links{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem 1.25rem}
+.alt-links a{font-size:.85rem}
+
+/* Footer */
+footer{padding:2rem 0;text-align:center;border-top:1px solid var(--border)}
+footer p{color:var(--muted);font-size:.8rem}
+
+@media(max-width:600px){
+  .nav-links{gap:.6rem}
+  .nav-links a{font-size:.75rem}
+  .page-header{padding:4rem 0 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="./" class="nav-name">CG</a>
+    <div class="nav-links">
+      <a href="./#about">About</a>
+      <a href="./#projects">Projects</a>
+      <a href="./#skills">Skills</a>
+      <a href="./contact.html" style="color:var(--text)">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <h1>Get in Touch</h1>
+    <p>Have a project in mind, want to collaborate, or just want to say hello? Send me a message.</p>
+  </div>
+</div>
+
+<section class="form-section">
+  <div class="container">
+    <form id="contact-form" action="https://formsubmit.co/creativegraceinc@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="New message from your portfolio site">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://drdanielgrace.github.io/contact.html?sent=true">
+      <input type="hidden" name="_template" value="table">
+      <input type="text" name="_honey" style="display:none">
+
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. John Doe" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" placeholder="e.g. john@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <select id="subject" name="subject" required>
+          <option value="" disabled selected>Select a topic</option>
+          <option value="Project Inquiry">Project Inquiry</option>
+          <option value="Archviz / 3D Visualization">Archviz / 3D Visualization</option>
+          <option value="Collaboration">Collaboration</option>
+          <option value="Freelance Work">Freelance Work</option>
+          <option value="General">General</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Tell me about your project or question..." required></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">Send Message</button>
+    </form>
+
+    <div class="form-status" id="form-status"></div>
+
+    <div class="alt-contact">
+      <p>You can also reach me directly</p>
+      <div class="alt-links">
+        <a href="mailto:creativegraceinc@gmail.com">[Email]</a>
+        <a href="https://www.linkedin.com/in/danielayobamideleojo/" target="_blank" rel="noopener">[LinkedIn]</a>
+        <a href="https://x.com/DrDanielCGrace" target="_blank" rel="noopener">[X / Twitter]</a>
+        <a href="https://github.com/DrDanielGrace" target="_blank" rel="noopener">[GitHub]</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Daniel Ayobamidele Grace &mdash; Creative Grace &mdash; 2026</p>
+  </div>
+</footer>
+
+<script>
+var form = document.getElementById('contact-form');
+var btn = document.getElementById('submit-btn');
+var statusEl = document.getElementById('form-status');
+
+if (window.location.search.indexOf('sent=true') !== -1) {
+  statusEl.className = 'form-status success';
+  statusEl.textContent = 'Message sent. I will get back to you soon.';
+  statusEl.style.display = 'block';
+  window.history.replaceState({}, '', window.location.pathname);
+}
+
+form.addEventListener('submit', function() {
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+});
+</script>
+
+</body>
+</html>

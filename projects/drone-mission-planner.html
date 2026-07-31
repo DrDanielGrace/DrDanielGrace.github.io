@@ -17,6 +17,7 @@
   --purple: #a855f7;
   --text: #e2e8f0;
   --muted: #64748b;
+  --red: #ef4444;
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
 }
@@ -74,6 +75,99 @@ section h2 {
   color: var(--text);
 }
 section p { color: var(--text); opacity: 0.88; }
+
+/* Interactive Demo */
+.demo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+@media (max-width: 640px) {
+  .demo-grid { grid-template-columns: 1fr; }
+}
+
+.demo-inputs {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.input-group {
+  margin-bottom: 0.85rem;
+}
+.input-group:last-of-type {
+  margin-bottom: 1.1rem;
+}
+.input-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+.input-group input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-group input:focus {
+  border-color: var(--accent);
+}
+.input-group input.input-error {
+  border-color: var(--red);
+}
+.input-error-msg {
+  font-size: 0.75rem;
+  color: var(--red);
+  margin-top: 0.2rem;
+  min-height: 1em;
+}
+
+.btn-calculate {
+  width: 100%;
+  padding: 0.6rem 1.25rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-calculate:hover { opacity: 0.88; }
+
+.demo-visual {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  overflow: hidden;
+}
+.demo-visual svg {
+  width: 100%;
+  height: 100%;
+}
+
+.demo-results {
+  grid-column: 1 / -1;
+}
+.demo-results .terminal {
+  margin-top: 0;
+}
 
 /* Flow diagram */
 .flow {
@@ -246,6 +340,58 @@ section p { color: var(--text); opacity: 0.88; }
   </section>
 
   <section>
+    <h2>Try It Live</h2>
+    <div class="demo-grid">
+      <div class="demo-inputs">
+        <div class="input-group">
+          <label for="dest-x">Destination X (meters)</label>
+          <input type="number" id="dest-x" placeholder="e.g. 10000">
+          <div class="input-error-msg" id="err-x"></div>
+        </div>
+        <div class="input-group">
+          <label for="dest-y">Destination Y (meters)</label>
+          <input type="number" id="dest-y" placeholder="e.g. 5500">
+          <div class="input-error-msg" id="err-y"></div>
+        </div>
+        <div class="input-group">
+          <label for="speed">Drone Speed (m/s)</label>
+          <input type="number" id="speed" placeholder="e.g. 25">
+          <div class="input-error-msg" id="err-speed"></div>
+        </div>
+        <div class="input-group">
+          <label for="battery">Available Battery (mAh)</label>
+          <input type="number" id="battery" placeholder="e.g. 20000">
+          <div class="input-error-msg" id="err-battery"></div>
+        </div>
+        <div class="input-group">
+          <label for="consumption">Battery Consumption Rate (mAh/s)</label>
+          <input type="number" id="consumption" placeholder="e.g. 25">
+          <div class="input-error-msg" id="err-consumption"></div>
+        </div>
+        <button class="btn-calculate" id="btn-calc" type="button">Calculate Mission</button>
+      </div>
+
+      <div class="demo-visual">
+        <svg id="flight-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0a0c10"/>
+          <text x="200" y="150" text-anchor="middle" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13">Enter coordinates to see the flight path</text>
+        </svg>
+      </div>
+
+      <div class="demo-results" id="results-container" style="display:none;">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dot r"></div>
+            <div class="terminal-dot y"></div>
+            <div class="terminal-dot g"></div>
+          </div>
+          <div class="terminal-code" id="results-output"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>How It Works</h2>
     <div class="flow">
       <div class="flow-step">
@@ -329,5 +475,189 @@ Mission saved to mission_log.txt</div>
     This tool calculates straight-line distance only. Real-world missions would need to account for wind, obstacles, altitude changes, and regulatory no-fly zones.
   </div>
 </div>
+
+<script>
+(function() {
+  var inputs = {
+    x: document.getElementById('dest-x'),
+    y: document.getElementById('dest-y'),
+    speed: document.getElementById('speed'),
+    battery: document.getElementById('battery'),
+    consumption: document.getElementById('consumption')
+  };
+  var errors = {
+    x: document.getElementById('err-x'),
+    y: document.getElementById('err-y'),
+    speed: document.getElementById('err-speed'),
+    battery: document.getElementById('err-battery'),
+    consumption: document.getElementById('err-consumption')
+  };
+  var btn = document.getElementById('btn-calc');
+  var resultsContainer = document.getElementById('results-container');
+  var resultsOutput = document.getElementById('results-output');
+  var svg = document.getElementById('flight-svg');
+
+  function formatNum(n) {
+    if (Number.isInteger(n)) return n.toString();
+    return (Math.round(n * 100) / 100).toFixed(2);
+  }
+
+  function clearErrors() {
+    for (var k in errors) {
+      errors[k].textContent = '';
+      inputs[k].classList.remove('input-error');
+    }
+  }
+
+  function setError(key, msg) {
+    errors[key].textContent = msg;
+    inputs[key].classList.add('input-error');
+  }
+
+  function validate() {
+    clearErrors();
+    var valid = true;
+    var vals = {};
+
+    // x and y: must be numbers (can be 0 or negative for coordinates, but spec says positive)
+    for (var k of ['x', 'y']) {
+      var v = parseFloat(inputs[k].value);
+      if (inputs[k].value.trim() === '' || isNaN(v)) {
+        setError(k, 'Required: enter a number');
+        valid = false;
+      } else if (v < 0) {
+        setError(k, 'Must be a positive number');
+        valid = false;
+      } else {
+        vals[k] = v;
+      }
+    }
+
+    // speed, battery, consumption: must be positive (> 0)
+    var posFields = {speed: 'speed', battery: 'battery', consumption: 'consumption'};
+    for (var fk in posFields) {
+      var fv = parseFloat(inputs[fk].value);
+      if (inputs[fk].value.trim() === '' || isNaN(fv)) {
+        setError(fk, 'Required: enter a number');
+        valid = false;
+      } else if (fv <= 0) {
+        setError(fk, 'Must be greater than 0');
+        valid = false;
+      } else {
+        vals[fk] = fv;
+      }
+    }
+
+    return valid ? vals : null;
+  }
+
+  function drawFlightPath(x, y, distance) {
+    var pad = 40;
+    var w = 400;
+    var h = 300;
+    var drawW = w - pad * 2;
+    var drawH = h - pad * 2;
+
+    // Scale to fit
+    var maxCoord = Math.max(Math.abs(x), Math.abs(y), 1);
+    var scale = Math.min(drawW, drawH) / (maxCoord * 1.2);
+
+    // Origin at bottom-left of draw area
+    var ox = pad + 20;
+    var oy = h - pad - 20;
+
+    // Destination position (flip y for screen coords)
+    var dx = ox + x * scale;
+    var dy = oy - y * scale;
+
+    // Clamp to SVG bounds with some margin
+    dx = Math.max(pad + 10, Math.min(w - pad - 10, dx));
+    dy = Math.max(pad + 10, Math.min(h - pad - 10, dy));
+
+    var midX = (ox + dx) / 2;
+    var midY = (oy + dy) / 2;
+
+    var svgContent = '<rect width="' + w + '" height="' + h + '" fill="#0a0c10"/>';
+
+    // Grid lines (subtle)
+    svgContent += '<line x1="' + ox + '" y1="' + pad + '" x2="' + ox + '" y2="' + (h - pad) + '" stroke="#1e2433" stroke-width="1"/>';
+    svgContent += '<line x1="' + pad + '" y1="' + oy + '" x2="' + (w - pad) + '" y2="' + oy + '" stroke="#1e2433" stroke-width="1"/>';
+
+    // Dashed flight path line
+    svgContent += '<line x1="' + ox + '" y1="' + oy + '" x2="' + dx + '" y2="' + dy + '" stroke="#4f8ef7" stroke-width="2" stroke-dasharray="8 4"/>';
+
+    // Distance label on the line
+    var labelAngle = Math.atan2(oy - dy, dx - ox) * 180 / Math.PI;
+    // Keep label readable (not upside down)
+    var textRotation = labelAngle;
+    if (textRotation > 90 || textRotation < -90) textRotation += 180;
+    svgContent += '<text x="' + midX + '" y="' + (midY - 8) + '" text-anchor="middle" fill="#4f8ef7" font-family="\'SF Mono\', \'Cascadia Code\', Consolas, monospace" font-size="11" transform="rotate(' + (-textRotation) + ' ' + midX + ' ' + (midY - 8) + ')">' + formatNum(distance) + 'm</text>';
+
+    // Home base dot (green)
+    svgContent += '<circle cx="' + ox + '" cy="' + oy + '" r="6" fill="#22c55e"/>';
+    svgContent += '<text x="' + ox + '" y="' + (oy + 18) + '" text-anchor="middle" fill="#22c55e" font-family="-apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif" font-size="10" font-weight="600">HOME</text>';
+
+    // Destination dot (orange)
+    svgContent += '<circle cx="' + dx + '" cy="' + dy + '" r="6" fill="#f97316"/>';
+    svgContent += '<text x="' + dx + '" y="' + (dy - 12) + '" text-anchor="middle" fill="#f97316" font-family="-apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif" font-size="10" font-weight="600">DEST (' + formatNum(x) + ', ' + formatNum(y) + ')</text>';
+
+    svg.innerHTML = svgContent;
+  }
+
+  function calculate() {
+    var vals = validate();
+    if (!vals) {
+      resultsContainer.style.display = 'none';
+      return;
+    }
+
+    var x = vals.x;
+    var y = vals.y;
+    var speed = vals.speed;
+    var availBattery = vals.battery;
+    var consumptionRate = vals.consumption;
+
+    var distance = Math.sqrt(x * x + y * y);
+    var flightTime = (2 * distance) / speed;
+    var requiredBattery = flightTime * consumptionRate;
+    var feasible = availBattery >= requiredBattery;
+
+    // Draw the visual
+    drawFlightPath(x, y, distance);
+
+    // Build output
+    var lines = [];
+    lines.push('Destination: (' + formatNum(x) + ' x, ' + formatNum(y) + ' y)');
+    lines.push('Distance (m): ' + formatNum(distance) + 'm');
+    lines.push('Speed: ' + formatNum(speed) + ' m/s');
+    lines.push('Flight Time: ' + formatNum(flightTime) + 's');
+    lines.push('Battery Consumption: ' + formatNum(consumptionRate) + ' mAh/s');
+    lines.push('Required Battery: ' + formatNum(requiredBattery) + ' mAh');
+    lines.push('Available Battery: ' + formatNum(availBattery) + ' mAh');
+
+    if (feasible) {
+      lines.push('Mission Feasible: <span style="color:#22c55e">True</span>');
+      var extra = availBattery - requiredBattery;
+      lines.push('Extra Battery: ' + formatNum(extra) + ' mAh');
+    } else {
+      lines.push('Mission Feasible: <span style="color:#f97316">False</span>');
+      var shortfall = requiredBattery - availBattery;
+      lines.push('Battery Shortfall: ' + formatNum(shortfall) + ' mAh');
+    }
+
+    resultsOutput.innerHTML = lines.join('\n');
+    resultsContainer.style.display = 'block';
+  }
+
+  btn.addEventListener('click', calculate);
+
+  // Allow Enter key to trigger calculation
+  for (var k in inputs) {
+    inputs[k].addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') calculate();
+    });
+  }
+})();
+</script>
 </body>
 </html>

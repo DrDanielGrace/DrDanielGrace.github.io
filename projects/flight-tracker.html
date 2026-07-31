@@ -240,6 +240,103 @@ section p { color: var(--text); opacity: 0.88; }
   color: var(--muted);
   line-height: 1.55;
 }
+
+/* Demo section */
+.demo-controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.demo-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.demo-input::placeholder {
+  color: var(--muted);
+}
+.demo-input:focus {
+  border-color: var(--accent);
+}
+.demo-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.25rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.demo-btn:hover {
+  opacity: 0.88;
+}
+.demo-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.demo-result {
+  margin-top: 1rem;
+  display: none;
+}
+.demo-result.visible {
+  display: block;
+}
+.demo-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.demo-error {
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid #ef4444;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #fca5a5;
+}
+.demo-note {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+@media (max-width: 520px) {
+  .demo-controls {
+    flex-direction: column;
+  }
+  .demo-btn {
+    text-align: center;
+  }
+}
 </style>
 </head>
 <body>
@@ -254,6 +351,35 @@ section p { color: var(--text); opacity: 0.88; }
   <section>
     <h2>Overview</h2>
     <p>A Python CLI tool that tracks all flights currently flying over any searched location. Uses the OpenSky Network API for live ADS-B flight data and Nominatim/OpenStreetMap for geocoding. Results display in terminal and export to both CSV and TXT formats.</p>
+  </section>
+
+  <section>
+    <h2>Try It Live</h2>
+    <p>Search any location to see flights currently overhead, using the same APIs as the CLI tool.</p>
+    <div class="demo-controls">
+      <input type="text" id="demo-location" class="demo-input" placeholder="Enter a location, e.g. London, United Kingdom">
+      <button id="demo-btn" class="demo-btn" onclick="trackFlights()">Track Flights</button>
+    </div>
+    <div id="demo-loading" class="demo-result">
+      <div class="demo-loading">
+        <div class="spinner"></div>
+        <span id="loading-text">Searching for flights...</span>
+      </div>
+    </div>
+    <div id="demo-error" class="demo-result">
+      <div class="demo-error" id="error-text"></div>
+    </div>
+    <div id="demo-output" class="demo-result">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot r"></div>
+          <div class="terminal-dot y"></div>
+          <div class="terminal-dot g"></div>
+        </div>
+        <div class="terminal-code" id="output-code"></div>
+      </div>
+    </div>
+    <p class="demo-note">Live data from the OpenSky Network. Coverage is strongest in Europe, North America, and parts of Asia.</p>
   </section>
 
   <section>
@@ -352,5 +478,150 @@ Total Flights Found: 47
     Coverage depends on OpenSky Network's ADS-B ground receiver infrastructure. Strongest in Europe, North America, and parts of Asia.
   </div>
 </div>
+
+<script>
+(function() {
+  var input = document.getElementById('demo-location');
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') trackFlights();
+  });
+})();
+
+function showPanel(id) {
+  ['demo-loading', 'demo-error', 'demo-output'].forEach(function(panelId) {
+    document.getElementById(panelId).classList.remove('visible');
+  });
+  if (id) document.getElementById(id).classList.add('visible');
+}
+
+function formatAltitude(meters) {
+  if (meters === null || meters === undefined) return 'N/A';
+  var feet = Math.round(meters * 3.28084);
+  if (feet > 18000) {
+    var fl = Math.round(feet / 100);
+    return 'FL' + (fl < 100 ? '0' : '') + fl;
+  }
+  return feet + ' ft';
+}
+
+function formatSpeed(ms) {
+  if (ms === null || ms === undefined) return 'N/A';
+  return Math.round(ms * 1.94384) + ' kts';
+}
+
+function padRight(str, len) {
+  while (str.length < len) str += ' ';
+  return str;
+}
+
+function getOrdinalDate(d) {
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var day = d.getUTCDate();
+  var suffix = 'th';
+  if (day === 1 || day === 21 || day === 31) suffix = 'st';
+  else if (day === 2 || day === 22) suffix = 'nd';
+  else if (day === 3 || day === 23) suffix = 'rd';
+  return day + suffix + ' of ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+}
+
+function padTime(n) {
+  return n < 10 ? '0' + n : '' + n;
+}
+
+function trackFlights() {
+  var location = document.getElementById('demo-location').value.trim();
+  if (!location) return;
+
+  var btn = document.getElementById('demo-btn');
+  btn.disabled = true;
+  document.getElementById('loading-text').textContent = 'Searching for flights over ' + location + '...';
+  showPanel('demo-loading');
+
+  fetch('https://nominatim.openstreetmap.org/search?q=' + encodeURIComponent(location) + '&format=json&limit=1', {
+    headers: { 'User-Agent': 'live-flight-tracker-web' }
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(geoData) {
+    if (!geoData || geoData.length === 0) {
+      showPanel('demo-error');
+      document.getElementById('error-text').textContent = 'Location not found. Try being more specific.';
+      btn.disabled = false;
+      return;
+    }
+
+    var bb = geoData[0].boundingbox;
+    var minLat = bb[0];
+    var maxLat = bb[1];
+    var minLon = bb[2];
+    var maxLon = bb[3];
+    var displayName = geoData[0].display_name;
+
+    document.getElementById('loading-text').textContent = 'Fetching live flight data over ' + location + '...';
+
+    return fetch('https://opensky-network.org/api/states/all?lamin=' + minLat + '&lamax=' + maxLat + '&lomin=' + minLon + '&lomax=' + maxLon)
+      .then(function(res) { return res.json(); })
+      .then(function(flightData) {
+        btn.disabled = false;
+
+        if (!flightData || !flightData.states || flightData.states.length === 0) {
+          showPanel('demo-error');
+          document.getElementById('error-text').textContent = 'No flights detected over this area. Coverage depends on ADS-B ground receiver availability.';
+          return;
+        }
+
+        var now = new Date();
+        var timeStr = padTime(now.getUTCHours()) + ':' + padTime(now.getUTCMinutes()) + ':' + padTime(now.getUTCSeconds()) + ' UTC';
+        var dateStr = getOrdinalDate(now);
+        var sep = '================================================';
+        var flights = flightData.states;
+        var totalFlights = flights.length;
+
+        var maxCallsign = 7;
+        var maxCountry = 7;
+        flights.forEach(function(f) {
+          var cs = (f[1] || '').trim() || 'N/A';
+          var co = f[2] || 'Unknown';
+          if (cs.length > maxCallsign) maxCallsign = cs.length;
+          if (co.length > maxCountry) maxCountry = co.length;
+        });
+
+        var lines = [];
+        lines.push(sep);
+        lines.push('LIVE FLIGHT TRACKER');
+        lines.push(sep);
+        lines.push('Location: ' + displayName);
+        lines.push('Date: ' + dateStr);
+        lines.push('Time: ' + timeStr);
+        lines.push('Total Flights Found: ' + totalFlights);
+        lines.push(sep);
+
+        flights.forEach(function(f, i) {
+          var callsign = (f[1] || '').trim() || 'N/A';
+          var country = f[2] || 'Unknown';
+          var altitude = formatAltitude(f[7]);
+          var speed = formatSpeed(f[9]);
+          var num = (i + 1) + '.';
+          lines.push(
+            padRight(num, ('' + totalFlights).length + 2) +
+            'Callsign: ' + padRight(callsign, maxCallsign + 1) +
+            ' || Reg. Country: ' + padRight(country, maxCountry + 1) +
+            ' || Altitude: ' + padRight(altitude, 7) +
+            ' || Speed: ' + speed
+          );
+        });
+
+        lines.push(sep);
+
+        document.getElementById('output-code').textContent = lines.join('\n');
+        showPanel('demo-output');
+      });
+  })
+  .catch(function() {
+    btn.disabled = false;
+    showPanel('demo-error');
+    document.getElementById('error-text').textContent = 'Unable to reach the flight data API. The OpenSky Network may be temporarily unavailable.';
+  });
+}
+</script>
 </body>
 </html>
