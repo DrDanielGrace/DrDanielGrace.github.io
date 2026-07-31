@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Flight Tracker -- Daniel Grace</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0f14;
+  --surface: #141720;
+  --border: #1e2433;
+  --accent: #4f8ef7;
+  --orange: #f97316;
+  --green: #22c55e;
+  --purple: #a855f7;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+/* Back link */
+.back {
+  display: inline-block;
+  padding: 1.5rem 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.back:hover { color: var(--accent); }
+.back-arrow { margin-right: 0.35rem; }
+
+/* Hero */
+.hero {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+.hero p {
+  font-size: 1.125rem;
+  color: var(--muted);
+}
+
+/* Sections */
+section { margin-bottom: 2.5rem; }
+section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+section p { color: var(--text); opacity: 0.88; }
+
+/* Flow diagram */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 1rem;
+}
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.flow-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 2rem;
+}
+.flow-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 0.45rem;
+}
+.flow-line {
+  width: 2px;
+  flex-grow: 1;
+  min-height: 1.5rem;
+  background: var(--border);
+}
+.flow-step:last-child .flow-line { display: none; }
+.flow-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  flex-grow: 1;
+}
+.flow-num {
+  color: var(--accent);
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+
+/* Terminal */
+.terminal {
+  background: #0a0c10;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+.terminal-bar {
+  background: var(--surface);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.terminal-dot.r { background: #ef4444; }
+.terminal-dot.y { background: #eab308; }
+.terminal-dot.g { background: #22c55e; }
+.terminal-code {
+  padding: 1rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Pills */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Links */
+.link-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.link-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  transition: border-color 0.2s;
+}
+.link-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+.link-card-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+.link-card-title {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Roadmap */
+.roadmap { margin-top: 1rem; }
+.roadmap-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 0.65rem;
+}
+.roadmap-version {
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 0.5rem;
+}
+.roadmap-v2 .roadmap-version { color: var(--orange); }
+.roadmap-v3 .roadmap-version { color: var(--green); }
+.roadmap-v4 .roadmap-version { color: var(--purple); }
+.roadmap-text {
+  font-size: 0.875rem;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+/* Note */
+.note {
+  margin-top: 2.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border-left: 3px solid var(--muted);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.825rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../" class="back"><span class="back-arrow">&larr;</span> Back to Portfolio</a>
+
+  <div class="hero">
+    <h1>Live Flight Tracker</h1>
+    <p>Real-time aircraft tracking over any location on Earth</p>
+  </div>
+
+  <section>
+    <h2>Overview</h2>
+    <p>A Python CLI tool that tracks all flights currently flying over any searched location. Uses the OpenSky Network API for live ADS-B flight data and Nominatim/OpenStreetMap for geocoding. Results display in terminal and export to both CSV and TXT formats.</p>
+  </section>
+
+  <section>
+    <h2>How It Works</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">1.</span> User enters a location (e.g. "London, United Kingdom")</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">2.</span> Nominatim API converts location to bounding box coordinates</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">3.</span> OpenSky Network API returns all aircraft in that airspace</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">4.</span> Data is parsed: callsign, registration country, altitude (converted to feet/flight levels), speed (converted to knots)</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div></div>
+        <div class="flow-content"><span class="flow-num">5.</span> Results print to terminal + save to CSV and TXT</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Example Output</h2>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot r"></div>
+        <div class="terminal-dot y"></div>
+        <div class="terminal-dot g"></div>
+      </div>
+      <div class="terminal-code">================================================
+LIVE FLIGHT TRACKER
+================================================
+Location: London, United Kingdom
+Date: 15th of July 2026
+Time: 14:32:10 UTC
+Total Flights Found: 47
+================================================
+1. Callsign: BAW256  || Reg. Country: United Kingdom || Altitude: FL380 || Speed: 462 kts
+2. Callsign: RYR8KP  || Reg. Country: Ireland        || Altitude: FL350 || Speed: 445 kts
+3. Callsign: DLH4TR  || Reg. Country: Germany        || Altitude: FL410 || Speed: 471 kts
+================================================</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tech Stack</h2>
+    <div class="pills">
+      <span class="pill">Python</span>
+      <span class="pill">Requests</span>
+      <span class="pill">OpenSky Network API</span>
+      <span class="pill">Nominatim API</span>
+      <span class="pill">CSV module</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Links</h2>
+    <div class="link-cards">
+      <a href="https://youtu.be/PTuW3GHoPZ4" class="link-card" target="_blank" rel="noopener">
+        <div class="link-card-label">Video Demo</div>
+        <div class="link-card-title">Watch on YouTube &rarr;</div>
+      </a>
+      <a href="https://github.com/DrDanielGrace/My-Flight-Software-Engineering-Learning/tree/main/Live_Flight_Tracker_cs50p_final_project" class="link-card" target="_blank" rel="noopener">
+        <div class="link-card-label">Source Code</div>
+        <div class="link-card-title">View on GitHub &rarr;</div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Version Roadmap</h2>
+    <div class="roadmap">
+      <div class="roadmap-item roadmap-v2">
+        <span class="roadmap-version">V2</span>
+        <span class="roadmap-text">Departure/destination airports, distance tracking, time-in-flight estimates, status flags</span>
+      </div>
+      <div class="roadmap-item roadmap-v3">
+        <span class="roadmap-version">V3</span>
+        <span class="roadmap-text">Web UI, AI-powered flight data chat, weather integration, auto-refresh monitoring</span>
+      </div>
+      <div class="roadmap-item roadmap-v4">
+        <span class="roadmap-version">V4</span>
+        <span class="roadmap-text">Full trip tracking, ticket integration, delay prediction, holding pattern analysis</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="note">
+    Coverage depends on OpenSky Network's ADS-B ground receiver infrastructure. Strongest in Europe, North America, and parts of Asia.
+  </div>
+</div>
+</body>
+</html>

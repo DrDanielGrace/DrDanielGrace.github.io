@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drone Mission Planner -- Daniel Grace</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d0f14;
+  --surface: #141720;
+  --border: #1e2433;
+  --accent: #4f8ef7;
+  --orange: #f97316;
+  --green: #22c55e;
+  --purple: #a855f7;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+/* Back link */
+.back {
+  display: inline-block;
+  padding: 1.5rem 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.back:hover { color: var(--accent); }
+.back-arrow { margin-right: 0.35rem; }
+
+/* Hero */
+.hero {
+  padding: 3rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+.hero h1 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+.hero p {
+  font-size: 1.125rem;
+  color: var(--muted);
+}
+
+/* Sections */
+section { margin-bottom: 2.5rem; }
+section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+section p { color: var(--text); opacity: 0.88; }
+
+/* Flow diagram */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 1rem;
+}
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.flow-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 2rem;
+}
+.flow-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 0.45rem;
+}
+.flow-line {
+  width: 2px;
+  flex-grow: 1;
+  min-height: 1.5rem;
+  background: var(--border);
+}
+.flow-step:last-child .flow-line { display: none; }
+.flow-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  flex-grow: 1;
+}
+.flow-num {
+  color: var(--accent);
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+
+/* Formula blocks */
+.formula-block {
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.75rem 1.1rem;
+  margin-bottom: 0.65rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+/* Terminal */
+.terminal {
+  background: #0a0c10;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+.terminal-bar {
+  background: var(--surface);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.terminal-dot.r { background: #ef4444; }
+.terminal-dot.y { background: #eab308; }
+.terminal-dot.g { background: #22c55e; }
+.terminal-code {
+  padding: 1rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Pills */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Links */
+.link-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.link-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  transition: border-color 0.2s;
+}
+.link-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+.link-card-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+.link-card-title {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Note */
+.note {
+  margin-top: 2.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border-left: 3px solid var(--muted);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.825rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="../" class="back"><span class="back-arrow">&larr;</span> Back to Portfolio</a>
+
+  <div class="hero">
+    <h1>Drone Mission Planner</h1>
+    <p>Pre-flight feasibility calculator for autonomous drone delivery missions</p>
+  </div>
+
+  <section>
+    <h2>Overview</h2>
+    <p>A Python tool for planning drone delivery missions. Input destination coordinates, drone speed, battery capacity, and consumption rate -- it calculates distance, flight time, battery requirements, and determines if the mission is feasible before the drone leaves the ground. Results print to terminal and auto-save to a mission log file.</p>
+  </section>
+
+  <section>
+    <h2>How It Works</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">1.</span> Input destination as X, Y coordinates (meters from home base at origin)</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">2.</span> Calculate straight-line distance using the Pythagorean theorem</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">3.</span> Compute round-trip flight time from distance and speed</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div><div class="flow-line"></div></div>
+        <div class="flow-content"><span class="flow-num">4.</span> Calculate required battery from flight time and consumption rate</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-indicator"><div class="flow-dot"></div></div>
+        <div class="flow-content"><span class="flow-num">5.</span> Compare against available battery capacity for go / no-go decision</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Math</h2>
+    <div class="formula-block">Distance: d = sqrt(x&sup2; + y&sup2;)</div>
+    <div class="formula-block">Round Trip: 2d</div>
+    <div class="formula-block">Flight Time: t = 2d / speed</div>
+    <div class="formula-block">Required Battery: b = t * consumption_rate</div>
+    <div class="formula-block">Feasibility: available_battery >= required_battery</div>
+  </section>
+
+  <section>
+    <h2>Example Output</h2>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot r"></div>
+        <div class="terminal-dot y"></div>
+        <div class="terminal-dot g"></div>
+      </div>
+      <div class="terminal-code">Destination: (10000 x, 5500 y)
+Distance (m): 11412.71m
+Speed: 25 m/s
+Flight Time: 456.51s
+Battery Consumption: 25 mAh/s
+Required Battery: 11412.71 mAh
+Available Battery: 20000 mAh
+Mission Feasible: True
+
+Mission saved to mission_log.txt</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tech Stack</h2>
+    <div class="pills">
+      <span class="pill">Python</span>
+      <span class="pill">Math module</span>
+      <span class="pill">File I/O</span>
+      <span class="pill">Pytest</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Links</h2>
+    <div class="link-cards">
+      <a href="https://youtu.be/85jDRyjy_Ww" class="link-card" target="_blank" rel="noopener">
+        <div class="link-card-label">Video Demo</div>
+        <div class="link-card-title">Watch on YouTube &rarr;</div>
+      </a>
+      <a href="https://github.com/DrDanielGrace/My-Flight-Software-Engineering-Learning/tree/main/cs50x_final_project" class="link-card" target="_blank" rel="noopener">
+        <div class="link-card-label">Source Code</div>
+        <div class="link-card-title">View on GitHub &rarr;</div>
+      </a>
+    </div>
+  </section>
+
+  <div class="note">
+    This tool calculates straight-line distance only. Real-world missions would need to account for wind, obstacles, altitude changes, and regulatory no-fly zones.
+  </div>
+</div>
+</body>
+</html>
