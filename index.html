@@ -61,6 +61,15 @@ section{padding:4rem 0}
 .project-card p{color:var(--muted);font-size:.875rem;margin-bottom:.75rem;line-height:1.6}
 .project-card a{font-size:.85rem;font-weight:500}
 
+/* Experience */
+.exp-item{display:flex;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
+.exp-item:last-child{border-bottom:none}
+.exp-date{min-width:90px;font-size:.75rem;color:var(--muted);font-family:var(--mono);padding-top:.15rem}
+.exp-role{font-weight:600;font-size:.95rem}
+.exp-co{color:var(--muted);font-size:.85rem}
+.exp-desc{color:var(--muted);font-size:.8rem;margin-top:.25rem;line-height:1.5}
+@media(max-width:600px){.exp-item{flex-direction:column;gap:.25rem}.exp-date{min-width:auto}}
+
 /* Current focus */
 .focus-list{list-style:none;padding:0}
 .focus-list li{position:relative;padding-left:1.25rem;margin-bottom:.6rem;font-size:.95rem;color:var(--text)}
@@ -96,6 +105,7 @@ body{padding-top:3rem}
     <div class="nav-links">
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
       <a href="#certs">Credentials</a>
       <a href="#projects">Projects</a>
       <a href="#focus">Focus</a>
@@ -125,7 +135,7 @@ body{padding-top:3rem}
     <h2 class="section-title">About</h2>
     <div class="about">
       <p>
-        I build software at the intersection of aerospace, autonomous systems, and 3D visualization. My work spans flight software engineering, satellite systems, autonomous drone navigation, and architectural visualization using Unreal Engine 5. I also work with Python, C, and C++ across data science, simulation, and real-time applications. My long-term goal is to contribute to indigenous satellite launches from Nigeria.
+        I build software at the intersection of aerospace, autonomous systems, and 3D visualization. Trained in flight dispatch with certifications from Lagos Aviation Academy and the FAA Safety Team. I work across Python, C, and C++ in data science, simulation, and real-time applications, and create architectural visualizations and cinematic content using Unreal Engine 5 and professional animation tools. My long-term goal is to contribute to indigenous satellite launches from Nigeria.
       </p>
     </div>
   </div>
@@ -149,23 +159,84 @@ body{padding-top:3rem}
     </div>
 
     <div class="skill-group">
-      <div class="skill-group-label">Tools</div>
+      <div class="skill-group-label">Tools &amp; Platforms</div>
       <div class="pills">
         <span class="pill">Unreal Engine 5</span>
         <span class="pill">Twinmotion</span>
+        <span class="pill">Blender</span>
+        <span class="pill">After Effects</span>
         <span class="pill">Git / GitHub</span>
         <span class="pill">VS Code</span>
+        <span class="pill">Google Sheets</span>
       </div>
     </div>
 
     <div class="skill-group">
       <div class="skill-group-label">Domains</div>
       <div class="pills">
+        <span class="pill">Flight Dispatch</span>
         <span class="pill">Flight Software</span>
         <span class="pill">Satellite Systems</span>
         <span class="pill">Autonomous Navigation</span>
         <span class="pill">3D Archviz</span>
+        <span class="pill">Cinematography</span>
+        <span class="pill">Animation</span>
         <span class="pill">AI / ML</span>
+        <span class="pill">Data Annotation</span>
+        <span class="pill">Game Development</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="experience">
+  <div class="container">
+    <h2 class="section-title">Experience</h2>
+
+    <div class="exp-item">
+      <div class="exp-date">2025 &mdash; now</div>
+      <div>
+        <div class="exp-role">Game Developer</div>
+        <div class="exp-co">Creative Grace</div>
+        <div class="exp-desc">Game development and 3D visualization using Unreal Engine 5</div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">2025 &mdash; now</div>
+      <div>
+        <div class="exp-role">Data Annotator</div>
+        <div class="exp-co">Stellar AI &middot; Contract</div>
+        <div class="exp-desc">UI/UX annotation and evaluation to improve generative AI model accuracy and interface responsiveness</div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">2025 &mdash; 2026</div>
+      <div>
+        <div class="exp-role">AI Training Contributor</div>
+        <div class="exp-co">Outlier &middot; Contract</div>
+        <div class="exp-desc">Analyzed and ranked AI model outputs to identify errors, reasoning flaws, and safety violations (RLHF)</div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">2024 &mdash; 2025</div>
+      <div>
+        <div class="exp-role">UGC Creator</div>
+        <div class="exp-co">Seedify</div>
+        <div class="exp-desc">Produced written and video content for Web3 AI agents and blockchain games, collaborating cross-functionally on brand strategy</div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">2022 &mdash; 2024</div>
+      <div>
+        <div class="exp-role">Head of Collaboration &amp; Research</div>
+        <div class="exp-co">Gemsora DAO</div>
+        <div class="exp-desc">Led partnerships with gaming projects, managed community engagement on Discord, and directed research for content strategy and project evaluation</div>
       </div>
     </div>
   </div>
@@ -175,7 +246,9 @@ body{padding-top:3rem}
 
 <section id="certs">
   <div class="container">
-    <h2 class="section-title">Certifications &amp; Achievements</h2>
+    <h2 class="section-title">Certifications &amp; Training</h2>
+
+    <div class="skill-group-label" style="margin-top:.5rem">Computer Science &amp; AI</div>
 
     <div class="edu-item">
       <div class="edu-title">CS50x: Introduction to Computer Science <span class="badge badge--done">2026</span></div>
@@ -183,8 +256,72 @@ body{padding-top:3rem}
     </div>
 
     <div class="edu-item">
-      <div class="edu-title">CS50p: Introduction to Programming with Python</div>
+      <div class="edu-title">CS50p: Introduction to Programming with Python <span class="badge badge--done">2026</span></div>
       <div class="edu-meta">Harvard University</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Claude 101 <span class="badge badge--done">2026</span></div>
+      <div class="edu-meta">Anthropic</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">AI Fluency Framework &amp; Foundations <span class="badge badge--done">2026</span></div>
+      <div class="edu-meta">Anthropic</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Data Analytics <span class="badge badge--done">2023</span></div>
+      <div class="edu-meta">ALX Africa</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Python Programming <span class="badge badge--done">2020</span></div>
+      <div class="edu-meta">Ladoke Akintola University of Technology</div>
+    </div>
+
+    <div class="skill-group-label" style="margin-top:1.5rem">Aviation</div>
+
+    <div class="edu-item">
+      <div class="edu-title">Advanced Flight Dispatch <span class="badge badge--done">2026</span></div>
+      <div class="edu-meta">Lagos Aviation Academy</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Basic Flight Dispatch <span class="badge badge--done">2025</span></div>
+      <div class="edu-meta">Lagos Aviation Academy</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">NAFI &mdash; Performance Charts Case Studies <span class="badge badge--done">2026</span></div>
+      <div class="edu-meta">FAA Safety Team (FAASTeam)</div>
+    </div>
+
+    <div class="skill-group-label" style="margin-top:1.5rem">3D, Animation &amp; Creative</div>
+
+    <div class="edu-item">
+      <div class="edu-title">C++ for Game Development <span class="badge badge--done">2025</span></div>
+      <div class="edu-meta">Udemy</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">This Is Animation <span class="badge badge--done">2025</span></div>
+      <div class="edu-meta">Sony Pictures Animation</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">After Effects Foundation <span class="badge badge--done">2025</span></div>
+      <div class="edu-meta">School of Motion</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Cinematography <span class="badge badge--done">2024</span></div>
+      <div class="edu-meta">Praxis Digital Academy</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Introduction to Animation &amp; Post Production <span class="badge badge--done">2024</span></div>
+      <div class="edu-meta">YAPPI Nigeria</div>
     </div>
   </div>
 </section>
