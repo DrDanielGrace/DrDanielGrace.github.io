@@ -3,24 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daniel's 14-Day Plan</title>
+<title>Daniel's 14-Day Mission Plan</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap');
-
   :root {
-    --bg: #0d0f14;
-    --surface: #141720;
-    --surface2: #1c2030;
+    --bg: #0a0c10;
+    --surface: #111520;
+    --surface2: #181d2a;
+    --surface3: #1e2436;
     --border: #252a3a;
-    --accent-blue: #4f8ef7;
-    --accent-orange: #f97316;
-    --accent-green: #22c55e;
+    --border-glow: #2a3550;
+    --accent-green: #00ff41;
+    --accent-orange: #ff8c00;
+    --accent-blue: #4a9eff;
     --accent-purple: #a855f7;
+    --accent-red: #ff3b3b;
+    --accent-gold: #ffd700;
     --text: #e2e8f0;
-    --muted: #64748b;
-    --math-color: #f97316;
-    --arch-color: #4f8ef7;
-    --complete-color: #22c55e;
+    --muted: #5a6580;
+    --math-color: #ff8c00;
+    --arch-color: #4a9eff;
+    --complete-color: #00ff41;
+    --hud-green: #00ff41;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,794 +31,1414 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
-    padding: 24px 16px 48px;
+    overflow-x: hidden;
   }
 
-  .header {
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      linear-gradient(rgba(0,255,65,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,65,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; padding: 20px 16px 60px; max-width: 900px; margin: 0 auto; }
+
+  /* LAUNCH SEQUENCE */
+  .launch-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  .launch-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .launch-text {
+    font-family: 'Courier New', monospace;
+    color: var(--hud-green);
+    font-size: clamp(14px, 3vw, 20px);
     text-align: center;
-    margin-bottom: 32px;
+    line-height: 2;
+    text-shadow: 0 0 10px rgba(0,255,65,0.5);
   }
-
-  .header .label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .header h1 {
-    font-size: clamp(22px, 5vw, 36px);
-    font-weight: 700;
-    line-height: 1.1;
-  }
-
-  .header h1 span.blue { color: var(--accent-blue); }
-  .header h1 span.orange { color: var(--accent-orange); }
-
-  .header .sub {
-    margin-top: 10px;
-    color: var(--muted);
+  .launch-btn {
+    margin-top: 30px;
+    padding: 12px 40px;
+    background: transparent;
+    border: 1px solid var(--hud-green);
+    color: var(--hud-green);
+    font-family: 'Courier New', monospace;
     font-size: 14px;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .launch-btn:hover { background: rgba(0,255,65,0.1); box-shadow: 0 0 20px rgba(0,255,65,0.2); }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 24px; }
+  .header .label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px; letter-spacing: 3px;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header h1 {
+    font-size: clamp(20px, 4.5vw, 32px);
+    font-weight: 700; line-height: 1.2;
+  }
+  .header h1 .orange { color: var(--math-color); }
+  .header h1 .blue { color: var(--arch-color); }
+  .callsign-badge {
+    display: inline-block;
+    margin-top: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px; letter-spacing: 2px;
+    padding: 4px 14px;
+    border: 1px solid var(--hud-green);
+    color: var(--hud-green);
+    border-radius: 4px;
+    text-shadow: 0 0 8px rgba(0,255,65,0.4);
   }
 
-  /* Legend */
-  .legend {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-  }
-
-  .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .dot.math { background: var(--math-color); }
-  .dot.arch { background: var(--arch-color); }
-  .dot.rest { background: var(--accent-purple); }
-
-  /* Week header */
-  .week-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin: 28px 0 12px;
-    padding-left: 4px;
-  }
-
-  /* Day card */
-  .day-card {
+  /* MISSION CONTROL DASHBOARD */
+  .dashboard {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
-    margin-bottom: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-
-  .day-card:hover { border-color: var(--accent-blue); }
-  .day-card.done { border-color: var(--complete-color); opacity: 0.75; }
-
-  .day-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    user-select: none;
-  }
-
-  .day-number {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    min-width: 36px;
-  }
-
-  .day-title {
-    flex: 1;
-    font-weight: 600;
-    font-size: 15px;
-  }
-
-  .day-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-size: 10px;
-    font-family: 'IBM Plex Mono', monospace;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-  }
-
-  .tag.math { background: rgba(249,115,22,0.15); color: var(--math-color); }
-  .tag.arch { background: rgba(79,142,247,0.15); color: var(--arch-color); }
-  .tag.rest { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
-
-  .chevron {
-    color: var(--muted);
-    font-size: 12px;
-    transition: transform 0.2s;
-    flex-shrink: 0;
-  }
-
-  .day-card.open .chevron { transform: rotate(180deg); }
-
-  .day-body {
-    display: none;
-    padding: 0 16px 16px;
-    border-top: 1px solid var(--border);
-  }
-
-  .day-card.open .day-body { display: block; }
-
-  .section-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin: 14px 0 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .section-label.math-label { color: var(--math-color); }
-  .section-label.arch-label { color: var(--arch-color); }
-  .section-label.note-label { color: var(--accent-purple); }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .task-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .task-list li {
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.5;
-    padding-left: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
     position: relative;
+    overflow: hidden;
   }
-
-  .task-list li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
+  .dashboard::before {
+    content: 'MISSION CONTROL';
+    position: absolute; top: 8px; right: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 9px; letter-spacing: 2px;
     color: var(--muted);
-    font-size: 11px;
-    top: 2px;
   }
-
-  .math-block {
-    background: rgba(249,115,22,0.06);
-    border-left: 3px solid var(--math-color);
-    border-radius: 0 6px 6px 0;
-    padding: 10px 12px;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.6;
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
   }
+  @media (min-width: 600px) { .dash-grid { grid-template-columns: repeat(4, 1fr); } }
 
-  .arch-block {
-    background: rgba(79,142,247,0.06);
-    border-left: 3px solid var(--arch-color);
-    border-radius: 0 6px 6px 0;
-    padding: 10px 12px;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  .note-block {
-    background: rgba(168,85,247,0.06);
-    border-left: 3px solid var(--accent-purple);
-    border-radius: 0 6px 6px 0;
-    padding: 10px 12px;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #c4b5fd;
-  }
-
-  .time-badge {
-    display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
+  .dash-item {
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 7px;
-    color: var(--muted);
-    margin-left: 8px;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+  .dash-item .dash-label {
+    font-family: 'Courier New', monospace;
+    font-size: 9px; letter-spacing: 1.5px;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .dash-item .dash-value {
+    font-size: 22px; font-weight: 700;
+    font-family: 'Courier New', monospace;
+  }
+  .dash-value.green { color: var(--hud-green); }
+  .dash-value.orange { color: var(--math-color); }
+  .dash-value.blue { color: var(--arch-color); }
+  .dash-value.gold { color: var(--accent-gold); }
+
+  /* PROGRESS RINGS */
+  .rings-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .ring-container { text-align: center; }
+  .ring-container svg { width: 110px; height: 110px; }
+  .ring-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    color: var(--muted); margin-top: 4px;
+  }
+  .ring-center-text {
+    font-family: 'Courier New', monospace;
+    font-size: 16px; font-weight: 700;
+    fill: var(--text);
   }
 
-  /* Progress */
-  .progress-bar-wrap {
+  /* DOCKING STATUS */
+  .docking-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+  }
+  .docking-icon { font-size: 16px; }
+  .dock-status { letter-spacing: 1px; }
+  .dock-status.docked { color: var(--hud-green); text-shadow: 0 0 8px rgba(0,255,65,0.4); }
+  .dock-status.awaiting { color: var(--accent-gold); }
+  .dock-status.offline { color: var(--muted); }
+
+  /* ALTITUDE METER */
+  .altitude-section {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 16px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
   }
-
-  .progress-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .alt-header {
+    display: flex; justify-content: space-between; align-items: center;
     margin-bottom: 10px;
   }
-
-  .progress-top span {
-    font-size: 13px;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
+  .alt-header span {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--muted); text-transform: uppercase;
   }
-
-  .progress-top strong {
-    font-size: 15px;
-    color: var(--complete-color);
+  .alt-header strong {
+    font-family: 'Courier New', monospace;
+    font-size: 14px; color: var(--hud-green);
   }
-
-  .bar-bg {
+  .alt-track {
+    position: relative;
+    height: 30px;
     background: var(--surface2);
-    border-radius: 99px;
-    height: 8px;
+    border-radius: 4px;
     overflow: hidden;
   }
-
-  .bar-fill {
+  .alt-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
-    border-radius: 99px;
-    transition: width 0.4s ease;
+    background: linear-gradient(90deg, var(--math-color), var(--accent-gold), var(--hud-green));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+    position: relative;
+  }
+  .alt-markers {
+    display: flex; justify-content: space-between;
+    margin-top: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 8px; color: var(--muted);
+  }
+  .alt-rocket {
+    position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+    font-size: 18px;
   }
 
-  .complete-btn {
-    margin-top: 14px;
-    width: 100%;
-    padding: 9px;
+  /* POWER GRID */
+  .power-grid {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .power-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .power-header span {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .power-header strong {
+    font-family: 'Courier New', monospace;
+    font-size: 13px; color: var(--arch-color);
+  }
+  .panels {
+    display: flex; gap: 3px; flex-wrap: wrap;
+  }
+  .panel-cell {
+    width: 20px; height: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .panel-cell.active {
+    background: rgba(74,158,255,0.3);
+    border-color: var(--arch-color);
+    box-shadow: 0 0 6px rgba(74,158,255,0.3);
+  }
+
+  /* HEAT MAP */
+  .heatmap-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .heatmap-title {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: 40px repeat(14, 1fr);
+    gap: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+  }
+  .hm-label { color: var(--muted); display: flex; align-items: center; }
+  .hm-cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    min-width: 0;
+  }
+  .hm-cell.math-active { background: rgba(255,140,0,0.4); border-color: var(--math-color); }
+  .hm-cell.arch-active { background: rgba(74,158,255,0.4); border-color: var(--arch-color); }
+  .hm-cell.both-active { background: linear-gradient(135deg, rgba(255,140,0,0.4), rgba(74,158,255,0.4)); border-color: var(--accent-purple); }
+  .hm-day-labels {
+    display: grid;
+    grid-template-columns: 40px repeat(14, 1fr);
+    gap: 3px;
+    margin-bottom: 4px;
+  }
+  .hm-day-labels span {
+    font-family: 'Courier New', monospace;
+    font-size: 8px; color: var(--muted);
+    text-align: center;
+  }
+
+  /* MISSION PATCHES */
+  .patches-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .patches-title {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .patches-grid {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .patch {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: var(--surface2);
+    opacity: 0.3;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .patch.earned {
+    opacity: 1;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 12px rgba(255,215,0,0.2);
+  }
+  .patch-icon { font-size: 20px; }
+  .patch-name {
+    font-family: 'Courier New', monospace;
+    font-size: 6px; letter-spacing: 0.5px;
+    color: var(--muted); margin-top: 2px;
+    text-align: center; line-height: 1.2;
+    max-width: 60px;
+  }
+  .patch.earned .patch-name { color: var(--accent-gold); }
+
+  /* MAYDAY ALERT */
+  .mayday {
+    background: rgba(255,59,59,0.08);
+    border: 1px solid rgba(255,59,59,0.3);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    display: none;
+    align-items: center; gap: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--accent-red);
+    animation: mayday-pulse 2s infinite;
+  }
+  .mayday.visible { display: flex; }
+  @keyframes mayday-pulse {
+    0%, 100% { border-color: rgba(255,59,59,0.3); }
+    50% { border-color: rgba(255,59,59,0.7); }
+  }
+
+  /* WEEK LABELS */
+  .week-label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px; letter-spacing: 2px;
+    color: var(--muted); text-transform: uppercase;
+    margin: 24px 0 12px; padding-left: 4px;
+  }
+
+  /* DAY CARD */
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .day-card:hover { border-color: var(--border-glow); }
+  .day-card.done { border-color: var(--complete-color); }
+  .day-card.done .day-header { opacity: 0.7; }
+
+  .day-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; cursor: pointer; user-select: none;
+  }
+  .day-number {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; color: var(--muted); min-width: 40px;
+  }
+  .day-title { flex: 1; font-weight: 600; font-size: 14px; }
+  .day-pct {
+    font-family: 'Courier New', monospace;
+    font-size: 11px; color: var(--muted);
+    min-width: 36px; text-align: right;
+  }
+  .day-pct.complete { color: var(--hud-green); }
+  .day-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tag {
+    font-size: 9px; font-family: 'Courier New', monospace;
+    padding: 2px 7px; border-radius: 20px; font-weight: 600; letter-spacing: 0.5px;
+  }
+  .tag.math { background: rgba(255,140,0,0.15); color: var(--math-color); }
+  .tag.arch { background: rgba(74,158,255,0.15); color: var(--arch-color); }
+  .tag.rest { background: rgba(168,85,247,0.15); color: var(--accent-purple); }
+  .chevron {
+    color: var(--muted); font-size: 11px;
+    transition: transform 0.2s; flex-shrink: 0;
+  }
+  .day-card.open .chevron { transform: rotate(180deg); }
+
+  .day-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--border);
+  }
+  .day-card.open .day-body { display: block; }
+
+  /* SECTION LABELS */
+  .section-label {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    margin: 12px 0 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .section-label.math-label { color: var(--math-color); }
+  .section-label.arch-label { color: var(--arch-color); }
+  .section-label.note-label { color: var(--accent-purple); }
+
+  .math-block, .arch-block, .note-block {
+    border-radius: 0 6px 6px 0;
+    padding: 10px 12px;
+    margin-top: 6px;
+    font-size: 13px; line-height: 1.6;
+  }
+  .math-block { background: rgba(255,140,0,0.06); border-left: 3px solid var(--math-color); }
+  .arch-block { background: rgba(74,158,255,0.06); border-left: 3px solid var(--arch-color); }
+  .note-block { background: rgba(168,85,247,0.06); border-left: 3px solid var(--accent-purple); color: #c4b5fd; }
+
+  .time-badge {
+    display: inline-block;
+    font-family: 'Courier New', monospace;
+    font-size: 9px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 6px; color: var(--muted);
+    margin-left: 6px;
+  }
+
+  .milestone {
+    background: linear-gradient(135deg, rgba(74,158,255,0.08), rgba(168,85,247,0.08));
+    border: 1px solid rgba(74,158,255,0.2);
+    border-radius: 8px; padding: 10px 12px;
+    margin: 12px 0 0; font-size: 13px;
+    color: #93c5fd; line-height: 1.5;
+  }
+  .milestone strong { color: var(--arch-color); }
+
+  /* FLIGHT LOG INPUTS */
+  .flight-log {
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
+    padding: 12px;
+    margin-top: 12px;
+  }
+  .flight-log-title {
+    font-family: 'Courier New', monospace;
+    font-size: 9px; letter-spacing: 1.5px;
+    color: var(--hud-green); margin-bottom: 8px;
+  }
+  .log-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 6px; flex-wrap: wrap;
+  }
+  .log-row label {
+    font-family: 'Courier New', monospace;
+    font-size: 11px; color: var(--muted);
+    min-width: 70px;
+  }
+  .log-row label.math-l { color: var(--math-color); }
+  .log-row label.arch-l { color: var(--arch-color); }
+  .log-input {
+    width: 60px; padding: 5px 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; color: var(--text);
+    font-family: 'Courier New', monospace; font-size: 13px;
+    text-align: center;
+  }
+  .log-input:focus { outline: none; border-color: var(--hud-green); }
+  .log-unit {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; color: var(--muted);
+  }
+  .log-planned {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; color: var(--muted);
+    margin-left: auto;
+  }
+
+  .day-progress {
+    margin-top: 10px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .day-bar-bg {
+    flex: 1; height: 6px;
+    background: var(--surface2); border-radius: 99px; overflow: hidden;
+  }
+  .day-bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--math-color), var(--arch-color));
+    transition: width 0.4s;
+  }
+  .day-pct-label {
+    font-family: 'Courier New', monospace;
+    font-size: 12px; color: var(--muted); min-width: 36px; text-align: right;
+  }
+  .day-pct-label.full { color: var(--hud-green); }
+
+  /* DEBRIEF */
+  .debrief {
+    margin-top: 10px;
+  }
+  .debrief-label {
+    font-family: 'Courier New', monospace;
+    font-size: 9px; letter-spacing: 1px;
+    color: var(--accent-purple); margin-bottom: 4px;
+  }
+  .debrief-input {
+    width: 100%; padding: 8px 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px;
+    resize: none; min-height: 36px;
+  }
+  .debrief-input:focus { outline: none; border-color: var(--accent-purple); }
+  .debrief-input::placeholder { color: var(--muted); font-style: italic; }
+
+  /* ACHIEVEMENT CARD */
+  .achievement {
+    display: none;
+    background: linear-gradient(135deg, rgba(0,255,65,0.05), rgba(255,215,0,0.05));
+    border: 1px solid rgba(0,255,65,0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px; color: var(--hud-green);
+    line-height: 1.6;
+  }
+  .achievement.visible { display: block; }
+  .achievement strong { color: var(--accent-gold); }
+
+  /* SESSION LOG */
+  .sessions-list {
+    margin-top: 8px;
+    max-height: 120px; overflow-y: auto;
+  }
+  .session-entry {
+    display: flex; gap: 8px; align-items: center;
+    padding: 3px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 10px; color: var(--muted);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .session-entry .se-time { color: var(--hud-green); min-width: 50px; }
+  .session-entry .se-subject { min-width: 50px; }
+  .session-entry .se-subject.math { color: var(--math-color); }
+  .session-entry .se-subject.arch { color: var(--arch-color); }
+
+  .add-session-btn {
+    margin-top: 6px;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
     color: var(--muted);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 10px; cursor: pointer;
     transition: all 0.2s;
   }
+  .add-session-btn:hover { border-color: var(--hud-green); color: var(--hud-green); }
 
-  .complete-btn:hover { border-color: var(--complete-color); color: var(--complete-color); }
-  .day-card.done .complete-btn { background: rgba(34,197,94,0.1); color: var(--complete-color); border-color: var(--complete-color); }
-
-  .resource-link {
-    color: var(--accent-blue);
-    font-size: 12px;
-    font-family: 'IBM Plex Mono', monospace;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 4px;
+  /* WEEKLY STATS */
+  .weekly-stats {
+    background: linear-gradient(135deg, var(--surface), var(--surface2));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .weekly-stats.visible { display: block; }
+  .ws-title {
+    font-family: 'Courier New', monospace;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--accent-gold); margin-bottom: 10px;
+  }
+  .ws-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .ws-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .ws-item-label {
+    font-family: 'Courier New', monospace;
+    font-size: 8px; letter-spacing: 1px;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .ws-item-value {
+    font-family: 'Courier New', monospace;
+    font-size: 16px; font-weight: 700;
+    margin-top: 2px;
   }
 
-  .resource-link:hover { text-decoration: underline; }
-
-  .milestone {
-    background: linear-gradient(135deg, rgba(79,142,247,0.1), rgba(168,85,247,0.1));
-    border: 1px solid rgba(79,142,247,0.3);
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin: 16px 0 0;
-    font-size: 13px;
-    color: #93c5fd;
-    line-height: 1.5;
+  /* RE-ENTRY */
+  .reentry {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(0,255,65,0.03), rgba(255,215,0,0.03));
+    border: 1px solid rgba(0,255,65,0.2);
+    border-radius: 16px;
+    margin-top: 20px;
+  }
+  .reentry.visible { display: block; }
+  .reentry h2 {
+    font-size: 24px; color: var(--hud-green);
+    margin-bottom: 4px;
+    text-shadow: 0 0 20px rgba(0,255,65,0.3);
+  }
+  .reentry .re-sub {
+    color: var(--accent-gold);
+    font-family: 'Courier New', monospace;
+    font-size: 12px; margin-bottom: 20px;
+  }
+  .reentry .final-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 10px; margin-top: 16px;
   }
 
-  .milestone strong { color: var(--accent-blue); }
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 </style>
 </head>
 <body>
 
+<!-- LAUNCH SEQUENCE -->
+<div class="launch-overlay" id="launch-overlay">
+  <div class="launch-text" id="launch-text"></div>
+  <button class="launch-btn" id="launch-btn" style="display:none" onclick="dismissLaunch()">INITIATE MISSION</button>
+</div>
+
+<div class="page">
+
 <div class="header">
-  <div class="label">Daniel Ayobamidele Grace · Aug 1 – Aug 14, 2026</div>
-  <h1><span class="orange">Math</span> + <span class="blue">Archviz</span><br>14-Day Launch Plan</h1>
-  <p class="sub">4-5 hours daily. Math in the morning. Unreal Engine archviz in the afternoon. Both feeding each other.</p>
+  <div class="label">Daniel Ayobamidele Grace // Aug 1 - Aug 14, 2026</div>
+  <h1><span class="orange">Math</span> + <span class="blue">Archviz</span><br>14-Day Mission Plan</h1>
+  <div class="callsign-badge" id="callsign">CALLSIGN: CADET</div>
 </div>
 
-<div class="legend">
-  <div class="legend-item"><div class="dot math"></div> Math (1-1.5 hrs)</div>
-  <div class="legend-item"><div class="dot arch"></div> Archviz / Unreal (3-3.5 hrs)</div>
-  <div class="legend-item"><div class="dot rest"></div> Notes / Bridge</div>
+<!-- MAYDAY ALERT -->
+<div class="mayday" id="mayday">
+  <span style="font-size:16px">&#9888;</span>
+  <span>MAYDAY // <span id="mayday-text">2 days without flight hours logged. Resume to maintain certification.</span></span>
 </div>
 
-<div class="progress-bar-wrap">
-  <div class="progress-top">
-    <span>Progress</span>
-    <strong id="progress-text">0 / 14 days</strong>
-  </div>
-  <div class="bar-bg">
-    <div class="bar-fill" id="progress-fill" style="width:0%"></div>
-  </div>
-</div>
-
-<div class="week-label">Week 1 — Foundation</div>
-
-<!-- DAY 1 -->
-<div class="day-card" id="day-1">
-  <div class="day-header" onclick="toggleDay(1)">
-    <span class="day-number">DAY 01</span>
-    <span class="day-title">Setup + Algebra Foundations + First Archviz Scene</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
+<!-- MISSION CONTROL DASHBOARD -->
+<div class="dashboard">
+  <div class="dash-grid">
+    <div class="dash-item">
+      <div class="dash-label">Flight Hours</div>
+      <div class="dash-value orange" id="d-flight-hrs">0.0</div>
     </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Resume Algebra 1 from where you stopped. Today's focus is variables and expressions. Write out every example by hand, not just watch. The habit of writing matters. Ask yourself: "what is this expression actually describing in the real world?" That question will matter later.
+    <div class="dash-item">
+      <div class="dash-label">Streak</div>
+      <div class="dash-value gold" id="d-streak">0&#x1F525;</div>
     </div>
-
-    <div class="section-label arch-label">Afternoon — Unreal Archviz Setup <span class="time-badge">3-3.5 hrs</span></div>
-    <div class="arch-block">
-      Install Twinmotion from Epic Games Launcher. Also open Fab.com in browser and download 2-3 free interior asset packs (search "interior architecture free"). Watch William Faucher's "Unreal Engine 5 Archviz for Beginners" intro video on YouTube. Then open Unreal Engine 5, create a new blank project, and just place one room with walls, a floor, and one light source. Nothing fancy. Just get a scene rendering today.
+    <div class="dash-item">
+      <div class="dash-label">Days Left</div>
+      <div class="dash-value green" id="d-days-left">14</div>
     </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Variables in algebra (x, y) are the same thing as parameters in Unreal Engine. When you set a room width to "5 meters" that 5 is a variable. Start seeing math and engine work as the same language.
+    <div class="dash-item">
+      <div class="dash-label">Patches</div>
+      <div class="dash-value blue" id="d-patches">0/10</div>
     </div>
-
-    <button class="complete-btn" onclick="markDone(1)">Mark Day Complete</button>
   </div>
 </div>
 
-<!-- DAY 2 -->
-<div class="day-card" id="day-2">
-  <div class="day-header" onclick="toggleDay(2)">
-    <span class="day-number">DAY 02</span>
-    <span class="day-title">Equations + Lumen Lighting Basics</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
+<!-- PROGRESS RINGS -->
+<div class="rings-section">
+  <div class="ring-container">
+    <svg viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,140,0,0.15)" stroke-width="8"/>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--math-color)" stroke-width="8"
+        stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+        transform="rotate(-90 60 60)" id="ring-math"/>
+      <text x="60" y="56" text-anchor="middle" class="ring-center-text" id="ring-math-text">0%</text>
+      <text x="60" y="72" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="Courier New">MATH</text>
+    </svg>
+    <div class="ring-label">Flight Hours</div>
   </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Linear equations, one variable. Solve 10 problems by hand. Focus on what "solving for x" actually means physically. If x is the unknown wall length, what equation describes it?
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Lumen Lighting <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Watch William Faucher "Lumen Lighting in UE5" tutorial. Then in your scene from Day 1, enable Lumen in Project Settings. Add a Directional Light (sun), a Sky Light, and one interior Rect Light to simulate a window. Adjust intensity values. Notice how changing the number changes the feel. Screenshot your best result.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Light intensity in Unreal is measured in Lux or Candela, which are real physics units. Sunlight is around 100,000 Lux. A living room lamp is around 300 Lux. Your equation today: if you want a room to feel like 3pm sunlight, what intensity value do you input? That is applied math.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(2)">Mark Day Complete</button>
+  <div class="ring-container">
+    <svg viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(74,158,255,0.15)" stroke-width="8"/>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--arch-color)" stroke-width="8"
+        stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+        transform="rotate(-90 60 60)" id="ring-arch"/>
+      <text x="60" y="56" text-anchor="middle" class="ring-center-text" id="ring-arch-text">0%</text>
+      <text x="60" y="72" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="Courier New">ARCHVIZ</text>
+    </svg>
+    <div class="ring-label">Build Hours</div>
   </div>
-</div>
-
-<!-- DAY 3 -->
-<div class="day-card" id="day-3">
-  <div class="day-header" onclick="toggleDay(3)">
-    <span class="day-number">DAY 03</span>
-    <span class="day-title">Graphing + Materials and Surfaces</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Graphing linear equations. Plot 5 lines on paper. Understand slope (rise over run). What does a steep slope look like vs a gentle one? You will use this when animating camera movements in Unreal.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Quixel Materials <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Open Quixel Bridge inside Unreal Engine (it is built in, top menu). Download 5 free surface materials: wood floor, white wall paint, concrete, glass, and a fabric or curtain material. Apply them to surfaces in your room. Focus on the Roughness and Metallic sliders in the material editor. Roughness = 0 is a mirror. Roughness = 1 is completely matte. Experiment with every surface until the room looks like a real interior.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Roughness and Metallic values in Unreal go from 0.0 to 1.0. That is a number line. Graphing where different materials sit on that line (glass at 0.0 roughness, concrete at 0.8 roughness) is literally plotting points on a graph.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(3)">Mark Day Complete</button>
+  <div class="ring-container">
+    <svg viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(0,255,65,0.15)" stroke-width="8"/>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="var(--hud-green)" stroke-width="8"
+        stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round"
+        transform="rotate(-90 60 60)" id="ring-total"/>
+      <text x="60" y="56" text-anchor="middle" class="ring-center-text" id="ring-total-text">0%</text>
+      <text x="60" y="72" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="Courier New">OVERALL</text>
+    </svg>
+    <div class="ring-label">Mission Progress</div>
   </div>
 </div>
 
-<!-- DAY 4 -->
-<div class="day-card" id="day-4">
-  <div class="day-header" onclick="toggleDay(4)">
-    <span class="day-number">DAY 04</span>
-    <span class="day-title">Systems of Equations + Camera and Composition</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
+<!-- DOCKING STATUS -->
+<div class="docking-bar">
+  <span class="docking-icon" id="dock-icon">&#128752;</span>
+  <span class="dock-status offline" id="dock-status">SYSTEMS STANDBY</span>
+</div>
+
+<!-- ALTITUDE METER -->
+<div class="altitude-section">
+  <div class="alt-header">
+    <span>Altitude // Math Flight Hours</span>
+    <strong id="alt-value">0 ft (Sea Level)</strong>
   </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Systems of two equations. Two unknowns, two equations, one solution. Think of it as finding the exact point where two lines cross. In 3D space, every object has an X and Y coordinate. A system of equations finds where two objects or paths meet.
+  <div class="alt-track">
+    <div class="alt-fill" id="alt-fill" style="width:0%">
+      <span class="alt-rocket">&#128640;</span>
     </div>
-
-    <div class="section-label arch-label">Afternoon — Cinecamera Setup <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Add a CineCamera Actor to your scene. Set Focal Length to 24mm for wide interior shots. Set Aperture (f-stop) to f/2.8 for a shallow depth of field effect. Place the camera at human eye level (around 160cm height). Frame a corner of the room using the rule of thirds. Watch one short video on "architectural photography composition" on YouTube to understand what clients expect to see. Take 3 different camera angles of your room and compare them.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Camera position in Unreal is X, Y, Z coordinates. Moving a camera from one point to another is literally solving for where two coordinate values meet. Your systems of equations practice is giving you the mental model for 3D spatial reasoning.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(4)">Mark Day Complete</button>
+  </div>
+  <div class="alt-markers">
+    <span>SEA LEVEL</span>
+    <span>35,000ft</span>
+    <span>KARMAN LINE</span>
+    <span>ISS ORBIT</span>
   </div>
 </div>
 
-<!-- DAY 5 -->
-<div class="day-card" id="day-5">
-  <div class="day-header" onclick="toggleDay(5)">
-    <span class="day-number">DAY 05</span>
-    <span class="day-title">Inequalities + Furniture and Asset Placement</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
+<!-- POWER GRID -->
+<div class="power-grid">
+  <div class="power-header">
+    <span>Station Power Grid // Archviz Hours</span>
+    <strong id="power-value">0 / 42 panels</strong>
   </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Inequalities and their graphs. Greater than, less than. This is about ranges, not exact values. A sofa must be less than 3 meters wide to fit in a room. The room temperature must stay between 18 and 26 degrees. Inequalities describe real constraints.
-    </div>
+  <div class="panels" id="power-panels"></div>
+</div>
 
-    <div class="section-label arch-label">Afternoon — Full Room Build <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Today you build your first complete room. Go to Fab.com or Sketchfab and download a free furniture pack. Place a sofa, a coffee table, a TV unit, a floor lamp, and some decorative items. Think about spacing: furniture should not touch walls, allow walking paths of at least 90cm. Add curtains or blinds to your window opening. Add a rug under the sofa. By end of day your scene should look like a real living room someone could move into.
-    </div>
+<!-- HEAT MAP -->
+<div class="heatmap-section">
+  <div class="heatmap-title">Subject Activity Map</div>
+  <div class="hm-day-labels" id="hm-labels"></div>
+  <div class="heatmap-grid" id="heatmap"></div>
+</div>
 
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      Furniture spacing constraints are inequalities. "The gap between sofa and TV must be more than 2 meters for comfortable viewing" is literally: gap > 2. You are solving interior design with algebra.
-    </div>
+<!-- MISSION PATCHES -->
+<div class="patches-section">
+  <div class="patches-title">Mission Patches</div>
+  <div class="patches-grid" id="patches"></div>
+</div>
 
-    <button class="complete-btn" onclick="markDone(5)">Mark Day Complete</button>
+<!-- WEEKLY STATS (Week 1) -->
+<div class="weekly-stats" id="week1-stats">
+  <div class="ws-title">WEEK 1 DEBRIEF // FOUNDATION COMPLETE</div>
+  <div class="ws-grid">
+    <div class="ws-item"><div class="ws-item-label">Total Hours</div><div class="ws-item-value green" id="w1-hours">0</div></div>
+    <div class="ws-item"><div class="ws-item-label">Math/Archviz Split</div><div class="ws-item-value blue" id="w1-split">--</div></div>
+    <div class="ws-item"><div class="ws-item-label">Best Day</div><div class="ws-item-value orange" id="w1-best">--</div></div>
+    <div class="ws-item"><div class="ws-item-label">Streak</div><div class="ws-item-value gold" id="w1-streak">0</div></div>
   </div>
 </div>
 
-<!-- DAY 6 -->
-<div class="day-card" id="day-6">
-  <div class="day-header" onclick="toggleDay(6)">
-    <span class="day-number">DAY 06</span>
-    <span class="day-title">Review Week + First Render Output</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math Review <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Do the Algebra 1 unit test or practice quiz for everything covered so far. Write down any topic you got wrong and note it for next week. This is not punishment, it is data about where your edge is.
-    </div>
+<div class="week-label">Week 1 -- Foundation</div>
 
-    <div class="section-label arch-label">Afternoon — High Quality Render <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Today you output your first proper render. In Unreal, go to Movie Render Queue (or High Resolution Screenshot). Set output resolution to 3840x2160 (4K). Enable Path Tracing in the render settings for maximum quality. Let it render your best camera angle. This will take time depending on your GPU, so set it going and do your math while it renders. When done, open the image. This is your first portfolio piece. Save it somewhere safe.
-    </div>
+<!-- DAYS WILL BE GENERATED BY JS -->
+<div id="days-container"></div>
 
-    <div class="milestone">
-      <strong>Week 1 Milestone:</strong> You have a complete furnished room rendered at 4K with proper lighting, materials, and camera composition. That is a real portfolio piece. The math you did this week (variables, equations, graphs, inequalities) all showed up in real decisions you made in Unreal.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(6)">Mark Day Complete</button>
+<!-- WEEKLY STATS (Week 2) -->
+<div class="weekly-stats" id="week2-stats">
+  <div class="ws-title">WEEK 2 DEBRIEF // MISSION COMPLETE</div>
+  <div class="ws-grid">
+    <div class="ws-item"><div class="ws-item-label">Total Hours</div><div class="ws-item-value green" id="w2-hours">0</div></div>
+    <div class="ws-item"><div class="ws-item-label">Math/Archviz Split</div><div class="ws-item-value blue" id="w2-split">--</div></div>
+    <div class="ws-item"><div class="ws-item-label">Best Day</div><div class="ws-item-value orange" id="w2-best">--</div></div>
+    <div class="ws-item"><div class="ws-item-label">Streak</div><div class="ws-item-value gold" id="w2-streak">0</div></div>
   </div>
 </div>
 
-<!-- DAY 7 -->
-<div class="day-card" id="day-7">
-  <div class="day-header" onclick="toggleDay(7)">
-    <span class="day-number">DAY 07</span>
-    <span class="day-title">Rest Day / Light Review</span>
-    <div class="day-tags">
-      <span class="tag rest">Rest</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label note-label">Today's Instruction</div>
-    <div class="note-block">
-      Do not open Unreal Engine today. Do not do Khan Academy today. Rest is not optional when you are building something serious. If you want to do something, watch one archviz inspiration video on YouTube or Behance, just to see what professional work looks like. Let your brain absorb the week. Come back tomorrow sharper.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(7)">Mark Day Complete</button>
+<!-- RE-ENTRY -->
+<div class="reentry" id="reentry">
+  <h2>RE-ENTRY COMPLETE</h2>
+  <div class="re-sub">Welcome home, <span id="re-callsign">Commander</span>.</div>
+  <div class="final-stats">
+    <div class="dash-item"><div class="dash-label">Total Flight Hours</div><div class="dash-value orange" id="re-hours">0</div></div>
+    <div class="dash-item"><div class="dash-label">Patches Earned</div><div class="dash-value gold" id="re-patches">0</div></div>
+    <div class="dash-item"><div class="dash-label">Best Streak</div><div class="dash-value green" id="re-streak">0</div></div>
   </div>
 </div>
 
-<div class="week-label">Week 2 — Intermediate Skills + Portfolio Ready</div>
-
-<!-- DAY 8 -->
-<div class="day-card" id="day-8">
-  <div class="day-header" onclick="toggleDay(8)">
-    <span class="day-number">DAY 08</span>
-    <span class="day-title">Functions + Exterior Scene Begins</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Introduction to functions. f(x) means: give me an input, I will give you an output. A render pipeline is a function. Give it a scene, it outputs an image. Your Python trading bot will be a function. Master this concept. Do 15 practice problems.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Start an Exterior Scene <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Start a new project. This time build the outside of a building. Use Unreal's landscape tools to create a simple flat ground. Add a building facade using basic geometry or a downloaded free model from Fab. Add trees and plants from Quixel Bridge (search "grass", "tree", "shrub"). Set up a sky with UE5's Sky Atmosphere and Volumetric Clouds. Get a realistic golden hour sun by rotating your Directional Light to a low angle. Exterior scenes are what Nigerian and international real estate developers actually want to show buyers first.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      The Sun's position in your scene is controlled by angles. Rotating the Directional Light by degrees is trigonometry. You are not there yet in math but you are already using it intuitively.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(8)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 9 -->
-<div class="day-card" id="day-9">
-  <div class="day-header" onclick="toggleDay(9)">
-    <span class="day-number">DAY 09</span>
-    <span class="day-title">Function Graphs + Walkthrough Animation</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Graphing functions. Understand how input values produce a curve, not just a line. Animation curves in Unreal Engine work exactly this way: the shape of the curve determines how fast or slow something moves. An "ease in" curve is a specific mathematical function shape.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Sequencer Walkthrough <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Open Unreal Sequencer (Cinematics menu). Create a Level Sequence. Add your CineCamera to the sequence. Set a keyframe at the start position and another keyframe 5 seconds later at a different position. Press play. The camera moves between them. Now right-click the keyframe curve and change it from Linear to Ease In/Ease Out. See how the motion feels more cinematic. Spend the rest of the session building a 15-30 second walkthrough of your exterior scene. This is a deliverable you can show clients.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(9)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 10 -->
-<div class="day-card" id="day-10">
-  <div class="day-header" onclick="toggleDay(10)">
-    <span class="day-number">DAY 10</span>
-    <span class="day-title">Ratios and Proportions + Scale and Accuracy</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Ratios, rates, and proportions. If a real building is 10 meters tall and your Unreal scene is in centimeters, that building must be 1000 units tall. Getting scale right is pure proportional math. A room that looks "off" is usually wrong scale.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Accurate Scale + Python Mini Script <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      First, go through your Week 1 room scene and check scale. Is the door 210cm tall? Is the sofa 85cm high? Is the ceiling 270cm? Fix anything that looks wrong using the Transform panel. Then, write a tiny Python script (10-15 lines) that takes a real-world measurement in meters and converts it to Unreal units (centimeters). Run it in VS Code. This is your first bridge between coding, math, and Unreal. Save the script to your GitHub.
-    </div>
-
-    <div class="section-label note-label">Bridge Note</div>
-    <div class="note-block">
-      This Python script is literally a function. Input: meters. Output: centimeters. f(x) = x * 100. You wrote math as code. This is exactly what you will do in aerospace simulation and in trading bots. Same skill, different domain.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(10)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 11 -->
-<div class="day-card" id="day-11">
-  <div class="day-header" onclick="toggleDay(11)">
-    <span class="day-number">DAY 11</span>
-    <span class="day-title">Percentages + Twinmotion Explore + Client Pricing</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Percentages and their applications. If you charge a client $200 for a render and your software or asset license costs you $30, your profit margin is 85%. If you want a 70% profit margin and your costs are $60, what should you charge? This is the business math you actually need to run this as income.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Twinmotion + Pricing Research <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Open Twinmotion (you installed it day one). Import a simple floor plan image as a reference. Build a quick room in Twinmotion to compare the workflow with Unreal. Twinmotion is faster to get started but less powerful. Unreal gives better quality. Understanding both means you can choose the right tool per client. Spend the last hour researching what archviz freelancers charge on Fiverr and Upwork. Note the range. Write down three price points you could offer: a basic package, a standard package, and a premium package.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(11)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 12 -->
-<div class="day-card" id="day-12">
-  <div class="day-header" onclick="toggleDay(12)">
-    <span class="day-number">DAY 12</span>
-    <span class="day-title">Algebra Review + Full Project from Floor Plan</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Do a full mixed review of everything from the past two weeks. Variables, equations, graphs, functions, ratios, percentages. Flag anything you are still shaky on. You are building a foundation. Gaps now become problems later in trigonometry and calculus.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Real Floor Plan Project <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Go to architecturaldesigns.com or houseplans.com and find a free simple house plan. A 2-bedroom or 3-bedroom layout works well. Build this layout inside Unreal Engine from scratch using the dimensions shown. Every wall, every door opening, every window. This is your most important practical exercise because it is exactly what a real client would send you. Do not try to furnish all of it today, just build the shell accurately.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(12)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 13 -->
-<div class="day-card" id="day-13">
-  <div class="day-header" onclick="toggleDay(13)">
-    <span class="day-number">DAY 13</span>
-    <span class="day-title">Applied Math + Full Scene Polish + Render</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math Applied <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Do not open Khan Academy today. Instead, write down 5 real math problems that came up during your 12 days of Unreal work. Room dimensions, light intensity values, camera angles, render resolution ratios, pricing calculations. Solve them. This is applied math, not textbook math. Both matter.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Portfolio Render Day <span class="time-badge">3.5 hrs</span></div>
-    <div class="arch-block">
-      Finish and polish your floor plan scene from Day 12. Add furniture to at least the main living area and master bedroom. Add lighting. Set up 3 camera angles. Then render all 3 at 4K using Movie Render Queue. Also render your exterior scene from Day 8. By end of today you have 4 high quality renders. That is a starter portfolio. Put them in a folder called "Portfolio V1."
-    </div>
-
-    <button class="complete-btn" onclick="markDone(13)">Mark Day Complete</button>
-  </div>
-</div>
-
-<!-- DAY 14 -->
-<div class="day-card" id="day-14">
-  <div class="day-header" onclick="toggleDay(14)">
-    <span class="day-number">DAY 14</span>
-    <span class="day-title">Two Week Review + Plan Forward + First Client Move</span>
-    <div class="day-tags">
-      <span class="tag math">Math</span>
-      <span class="tag arch">Archviz</span>
-      <span class="tag rest">Strategy</span>
-    </div>
-    <span class="chevron">▼</span>
-  </div>
-  <div class="day-body">
-    <div class="section-label math-label">Morning — Math <span class="time-badge">1 hr</span></div>
-    <div class="math-block">
-      Khan Academy: Start the next Algebra 1 unit, whatever comes after where you are now. Just one session. You are not stopping math. You are keeping the momentum going into week three and beyond. Math is a long game. Keep the daily habit.
-    </div>
-
-    <div class="section-label arch-label">Afternoon — Launch Moves <span class="time-badge">3 hrs</span></div>
-    <div class="arch-block">
-      Three things today. First: create a simple portfolio PDF with your 4 renders, your name, and a contact email. Use Canva to make it look clean. Second: set up a Fiverr account or an Upwork profile with archviz as your service. Upload your renders. Write a short description of what you offer. Third: post your best render on LinkedIn with a caption about what you are building. Tag it with architecture and visualization and Unreal Engine. The point is not to get clients today. The point is to exist publicly in this space.
-    </div>
-
-    <div class="milestone">
-      <strong>14-Day Outcome:</strong> You have a portfolio with real renders, a profile on at least one freelance platform, and two weeks of consistent daily math. You understand how algebra shows up in a real working tool. Week 3 onwards: keep math going daily, take on your first paid project (even small), and start Algebra 2 or the next unit. WorldQuant can come back in week 3 as your evening rotation when you need an academic shift.
-    </div>
-
-    <button class="complete-btn" onclick="markDone(14)">Mark Day Complete</button>
-  </div>
 </div>
 
 <script>
-  const state = JSON.parse(localStorage.getItem('daniel-plan') || '{}');
-
-  function updateProgress() {
-    const done = Object.values(state).filter(Boolean).length;
-    document.getElementById('progress-text').textContent = done + ' / 14 days';
-    document.getElementById('progress-fill').style.width = (done / 14 * 100) + '%';
+const DAYS_DATA = [
+  {
+    num: 1, title: "Module Assembly // Algebra Foundations + First Archviz Scene",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Khan Academy: Resume Algebra 1 from where you stopped. Today's focus is variables and expressions. Write out every example by hand, not just watch. The habit of writing matters. Ask yourself: what is this expression actually describing in the real world?",
+    arch: "Install Twinmotion from Epic Games Launcher. Open Fab.com and download 2-3 free interior asset packs. Watch William Faucher's \"Unreal Engine 5 Archviz for Beginners\" intro. Then open UE5, create a blank project, place one room with walls, a floor, and one light source. Get a scene rendering today.",
+    bridge: "Variables in algebra (x, y) are the same thing as parameters in Unreal Engine. When you set a room width to \"5 meters\" that 5 is a variable. Start seeing math and engine work as the same language.",
+    buildMission: "Module Assembly"
+  },
+  {
+    num: 2, title: "Power Systems // Equations + Lumen Lighting",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3,
+    math: "Khan Academy: Linear equations, one variable. Solve 10 problems by hand. Focus on what \"solving for x\" actually means physically. If x is the unknown wall length, what equation describes it?",
+    arch: "Watch William Faucher \"Lumen Lighting in UE5\" tutorial. In your Day 1 scene, enable Lumen in Project Settings. Add a Directional Light (sun), Sky Light, and one interior Rect Light. Adjust intensity values. Screenshot your best result.",
+    bridge: "Light intensity in Unreal is measured in Lux or Candela -- real physics units. Sunlight is around 100,000 Lux. A living room lamp is around 300 Lux. If you want a room to feel like 3pm sunlight, what intensity value do you input? That is applied math.",
+    buildMission: "Power Systems Online"
+  },
+  {
+    num: 3, title: "Hull Plating // Graphing + Materials and Surfaces",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3,
+    math: "Khan Academy: Graphing linear equations. Plot 5 lines on paper. Understand slope (rise over run). What does a steep slope look like vs a gentle one? You will use this when animating camera movements in Unreal.",
+    arch: "Open Quixel Bridge inside UE (top menu). Download 5 free surface materials: wood floor, white wall paint, concrete, glass, and fabric. Apply them to your room surfaces. Focus on Roughness and Metallic sliders. Roughness = 0 is a mirror. Roughness = 1 is matte. Experiment until the room looks real.",
+    bridge: "Roughness and Metallic values go from 0.0 to 1.0. That is a number line. Plotting where different materials sit (glass at 0.0, concrete at 0.8) is literally plotting points on a graph.",
+    buildMission: "Hull Plating Applied"
+  },
+  {
+    num: 4, title: "Navigation Array // Systems of Equations + Camera Composition",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3,
+    math: "Khan Academy: Systems of two equations. Two unknowns, two equations, one solution. Finding the exact point where two lines cross. In 3D space, every object has X and Y coordinates. A system of equations finds where two paths meet.",
+    arch: "Add a CineCamera Actor. Set Focal Length to 24mm (wide interior). Aperture f/2.8 for depth of field. Place at human eye level (160cm). Frame a corner using rule of thirds. Watch one \"architectural photography composition\" video. Take 3 different camera angles and compare.",
+    bridge: "Camera position is X, Y, Z coordinates. Moving a camera from one point to another is literally solving for where two coordinate values meet. Systems of equations = 3D spatial reasoning.",
+    buildMission: "Navigation Array Calibrated"
+  },
+  {
+    num: 5, title: "Habitat Furnishing // Inequalities + Furniture Placement",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Khan Academy: Inequalities and their graphs. Greater than, less than. This is about ranges. A sofa must be less than 3m wide to fit. Room temperature stays between 18 and 26 degrees. Inequalities describe real constraints.",
+    arch: "Build your first complete room. Download a furniture pack from Fab.com or Sketchfab. Place a sofa, coffee table, TV unit, floor lamp, decorative items. Furniture should not touch walls, allow 90cm walking paths. Add curtains, a rug. Make it look like a real living room.",
+    bridge: "Furniture spacing constraints ARE inequalities. \"Gap between sofa and TV must be > 2 meters\" is literally: gap > 2. You are solving interior design with algebra.",
+    buildMission: "Habitat Fully Furnished"
+  },
+  {
+    num: 6, title: "Systems Check // Review Week + First Render Output",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Khan Academy: Algebra 1 unit test or practice quiz for everything so far. Write down any topic you got wrong. This is not punishment, it is data about where your edge is.",
+    arch: "Output your first proper render. Movie Render Queue or High Res Screenshot. Resolution: 3840x2160 (4K). Enable Path Tracing for maximum quality. Let it render your best angle. This is your first portfolio piece.",
+    bridge: null,
+    milestone: "WEEK 1 MILESTONE: You have a complete furnished room rendered at 4K with proper lighting, materials, and camera composition. That is a real portfolio piece.",
+    buildMission: "Systems Check Complete"
+  },
+  {
+    num: 7, title: "Station Drift // Rest Day",
+    tags: ['rest'], mathPlanned: 0, archPlanned: 0,
+    math: null, arch: null,
+    bridge: "Do not open Unreal Engine today. Do not do Khan Academy. Rest is not optional when building something serious. If you want, watch one archviz inspiration video. Let your brain absorb the week.",
+    buildMission: "Station Drift (Rest Cycle)"
+  },
+  {
+    num: 8, title: "Exterior Hull // Functions + Exterior Scene Begins",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Khan Academy: Introduction to functions. f(x) means: give me an input, I give you an output. A render pipeline is a function. Your Python trading bot will be a function. Master this. Do 15 practice problems.",
+    arch: "New project. Build the outside of a building. Use landscape tools for flat ground. Add a building facade. Trees and plants from Quixel Bridge. Set up Sky Atmosphere and Volumetric Clouds. Golden hour sun by rotating Directional Light to a low angle. Exterior scenes are what real estate developers want first.",
+    bridge: "The Sun's position is controlled by angles. Rotating the Directional Light by degrees is trigonometry. You are not there yet in math but you are already using it intuitively.",
+    buildMission: "Exterior Hull Deployed"
+  },
+  {
+    num: 9, title: "Propulsion Test // Function Graphs + Walkthrough Animation",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Khan Academy: Graphing functions. How input values produce a curve. Animation curves in UE work exactly this way: the curve shape determines speed. An \"ease in\" curve is a specific mathematical function.",
+    arch: "Open Sequencer (Cinematics menu). Create a Level Sequence. Add CineCamera, set keyframes at start and end positions. Change curve from Linear to Ease In/Out. Build a 15-30 second walkthrough of your exterior scene. This is a client deliverable.",
+    bridge: null,
+    buildMission: "Propulsion Systems Tested"
+  },
+  {
+    num: 10, title: "Precision Docking // Ratios + Scale and Accuracy",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Khan Academy: Ratios, rates, proportions. A 10m building in centimeters = 1000 units. Getting scale right is pure proportional math. A room that looks \"off\" is usually wrong scale.",
+    arch: "Check scale on your Week 1 room. Door 210cm? Sofa 85cm? Ceiling 270cm? Fix using Transform panel. Then write a Python script (10-15 lines) that converts meters to Unreal units. Run it in VS Code. Push to GitHub.",
+    bridge: "This Python script IS a function. Input: meters. Output: centimeters. f(x) = x * 100. You wrote math as code. Same skill used in aerospace simulation and trading bots.",
+    buildMission: "Precision Docking Achieved"
+  },
+  {
+    num: 11, title: "Solar Array // Percentages + Twinmotion + Client Pricing",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3,
+    math: "Khan Academy: Percentages. If you charge $200 for a render and costs are $30, profit margin is 85%. If you want 70% margin and costs are $60, what do you charge? Business math you need to run this as income.",
+    arch: "Open Twinmotion. Import a floor plan. Build a quick room to compare workflow with Unreal. Last hour: research archviz freelancer rates on Fiverr and Upwork. Write down three price points: basic, standard, premium.",
+    bridge: null,
+    buildMission: "Solar Array Extended"
+  },
+  {
+    num: 12, title: "Full Station Assembly // Algebra Review + Floor Plan Project",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Khan Academy: Full mixed review. Variables, equations, graphs, functions, ratios, percentages. Flag anything shaky. Gaps now become problems later in trigonometry and calculus.",
+    arch: "Find a free house plan (architecturaldesigns.com or houseplans.com). 2-3 bedroom layout. Build this inside Unreal from scratch using real dimensions. Every wall, door, window. Just the shell today, accurate to the plan.",
+    bridge: null,
+    buildMission: "Full Station Assembly"
+  },
+  {
+    num: 13, title: "Station Commissioning // Applied Math + Full Scene Polish",
+    tags: ['math','arch'], mathPlanned: 1, archPlanned: 3.5,
+    math: "Do not open Khan Academy. Write down 5 real math problems from your 12 days of Unreal work. Room dimensions, light values, camera angles, render ratios, pricing. Solve them. This is applied math.",
+    arch: "Finish and polish Day 12 scene. Furnish living area and master bedroom. Add lighting. Set up 3 camera angles. Render all 3 at 4K. Also render exterior from Day 8. You now have 4 high quality renders. Save as \"Portfolio V1.\"",
+    bridge: null,
+    buildMission: "Station Commissioned"
+  },
+  {
+    num: 14, title: "Re-Entry // Review + Plan Forward + First Client Move",
+    tags: ['math','arch','rest'], mathPlanned: 1, archPlanned: 3,
+    math: "Khan Academy: Start the next Algebra 1 unit. Just one session. You are not stopping math. Keep the momentum into week three. Math is a long game. Keep the daily habit.",
+    arch: "Three moves today. 1) Create a portfolio PDF with your 4 renders using Canva. 2) Set up a Fiverr or Upwork profile with archviz as your service. 3) Post your best render on LinkedIn with architecture and Unreal Engine tags.",
+    bridge: null,
+    milestone: "14-DAY OUTCOME: Portfolio with real renders, a freelance profile, and two weeks of daily math. You understand how algebra shows up in a real working tool. Week 3: keep math daily, take on first paid project, start Algebra 2.",
+    buildMission: "Re-Entry Complete"
   }
+];
 
-  function markDone(n) {
-    state['day' + n] = !state['day' + n];
-    localStorage.setItem('daniel-plan', JSON.stringify(state));
-    const card = document.getElementById('day-' + n);
-    const btn = card.querySelector('.complete-btn');
-    if (state['day' + n]) {
-      card.classList.add('done');
-      btn.textContent = 'Completed!';
-    } else {
-      card.classList.remove('done');
-      btn.textContent = 'Mark Day Complete';
+const PATCHES = [
+  { id: 'first-flight', name: 'FIRST FLIGHT', icon: '✈', desc: 'Log your first math session' },
+  { id: 'module-1', name: 'MODULE ASSEMBLY', icon: '🛰', desc: 'Complete Day 1' },
+  { id: 'algebra-1', name: 'ALGEBRA-I', icon: '📊', desc: 'Log 5 math sessions' },
+  { id: 'architect', name: 'ARCHITECT', icon: '🏗', desc: 'Log 10 archviz hours' },
+  { id: 'streak-3', name: 'STEADY ORBIT', icon: '🔥', desc: '3-day streak' },
+  { id: 'streak-7', name: 'MISSION CTRL', icon: '🌟', desc: '7-day streak' },
+  { id: 'docking', name: 'FIRST DOCK', icon: '🔗', desc: 'Hit both targets in one day' },
+  { id: 'karman', name: 'KARMAN LINE', icon: '🚀', desc: 'Reach 100km altitude (10hrs math)' },
+  { id: 'full-power', name: 'FULL POWER', icon: '⚡', desc: 'All 42 solar panels online' },
+  { id: 'commander', name: 'COMMANDER', icon: '🌖', desc: 'Complete all 14 days' }
+];
+
+const ALTITUDE_MILESTONES = [
+  { hrs: 0, ft: 0, label: 'Sea Level' },
+  { hrs: 5, ft: 35000, label: '35,000 ft (Cruising)' },
+  { hrs: 10, ft: 328084, label: '100 km (Karman Line)' },
+  { hrs: 14, ft: 1338583, label: '408 km (ISS Orbit)' }
+];
+
+let state = JSON.parse(localStorage.getItem('daniel-mission-v2') || 'null') || {
+  days: {},
+  sessions: {},
+  debriefs: {},
+  launched: false,
+  bestStreak: 0
+};
+
+function save() { localStorage.setItem('daniel-mission-v2', JSON.stringify(state)); }
+
+function getDayState(n) {
+  if (!state.days[n]) state.days[n] = { mathHrs: 0, archHrs: 0 };
+  return state.days[n];
+}
+
+function getTotalMathHrs() {
+  return Object.values(state.days).reduce((s, d) => s + (d.mathHrs || 0), 0);
+}
+
+function getTotalArchHrs() {
+  return Object.values(state.days).reduce((s, d) => s + (d.archHrs || 0), 0);
+}
+
+function getPlannedMathHrs() { return DAYS_DATA.reduce((s, d) => s + d.mathPlanned, 0); }
+function getPlannedArchHrs() { return DAYS_DATA.reduce((s, d) => s + d.archPlanned, 0); }
+
+function getDayPct(n) {
+  const d = getDayState(n);
+  const dd = DAYS_DATA[n - 1];
+  const planned = dd.mathPlanned + dd.archPlanned;
+  if (planned === 0) return d.mathHrs > 0 || d.archHrs > 0 ? 100 : 100;
+  return Math.min(100, Math.round(((d.mathHrs + d.archHrs) / planned) * 100));
+}
+
+function isDayDone(n) { return getDayPct(n) >= 80; }
+
+function getStreak() {
+  let streak = 0;
+  for (let i = 14; i >= 1; i--) {
+    if (isDayDone(i)) streak++;
+    else if (getDayState(i).mathHrs > 0 || getDayState(i).archHrs > 0) break;
+    else break;
+  }
+  if (streak === 0) {
+    for (let i = 1; i <= 14; i++) {
+      if (isDayDone(i)) streak++;
+      else break;
     }
-    updateProgress();
   }
+  return streak;
+}
 
-  function toggleDay(n) {
-    const card = document.getElementById('day-' + n);
-    card.classList.toggle('open');
-  }
+function getCallsign() {
+  const hrs = getTotalMathHrs() + getTotalArchHrs();
+  const streak = getStreak();
+  if (hrs >= 50 && streak >= 10) return 'MISSION COMMANDER';
+  if (hrs >= 35 && streak >= 7) return 'CAPTAIN';
+  if (hrs >= 20 && streak >= 3) return 'FIRST OFFICER';
+  if (hrs >= 5) return 'PILOT';
+  return 'CADET';
+}
 
-  // Init state
+function getAltitude() {
+  const hrs = getTotalMathHrs();
+  if (hrs >= 14) return { ft: 1338583, label: '408 km (ISS Orbit)', pct: 100 };
+  if (hrs >= 10) return { ft: 328084, label: '100 km (Karman Line)', pct: 70 + (hrs - 10) / 4 * 30 };
+  if (hrs >= 5) return { ft: 35000 + (hrs - 5) / 5 * 293084, label: Math.round(35000 + (hrs - 5) / 5 * 293084).toLocaleString() + ' ft', pct: 35 + (hrs - 5) / 5 * 35 };
+  return { ft: hrs / 5 * 35000, label: Math.round(hrs / 5 * 35000).toLocaleString() + ' ft', pct: hrs / 5 * 35 };
+}
+
+function getEarnedPatches() {
+  const earned = new Set();
+  const mathHrs = getTotalMathHrs();
+  const archHrs = getTotalArchHrs();
+  const streak = getStreak();
+  const mathSessions = Object.values(state.days).filter(d => d.mathHrs > 0).length;
+  const daysComplete = DAYS_DATA.filter((_, i) => isDayDone(i + 1)).length;
+
+  if (mathSessions >= 1) earned.add('first-flight');
+  if (isDayDone(1)) earned.add('module-1');
+  if (mathSessions >= 5) earned.add('algebra-1');
+  if (archHrs >= 10) earned.add('architect');
+  if (streak >= 3) earned.add('streak-3');
+  if (streak >= 7) earned.add('streak-7');
+  if (mathHrs >= 10) earned.add('karman');
+  if (archHrs >= 42) earned.add('full-power');
+  if (daysComplete >= 14) earned.add('commander');
+
   for (let i = 1; i <= 14; i++) {
-    if (state['day' + i]) {
-      const card = document.getElementById('day-' + i);
-      card.classList.add('done');
-      card.querySelector('.complete-btn').textContent = 'Completed!';
+    const d = getDayState(i);
+    const dd = DAYS_DATA[i - 1];
+    if (dd.mathPlanned > 0 && dd.archPlanned > 0 && d.mathHrs >= dd.mathPlanned && d.archHrs >= dd.archPlanned) {
+      earned.add('docking');
+      break;
     }
   }
-  updateProgress();
-</script>
 
+  return earned;
+}
+
+function getMaydayDays() {
+  let lastActive = 0;
+  for (let i = 1; i <= 14; i++) {
+    const d = getDayState(i);
+    if (d.mathHrs > 0 || d.archHrs > 0) lastActive = i;
+  }
+  if (lastActive === 0) return 0;
+  let gap = 0;
+  for (let i = lastActive + 1; i <= 14; i++) {
+    const d = getDayState(i);
+    if (d.mathHrs === 0 && d.archHrs === 0) gap++;
+    else break;
+  }
+  return gap;
+}
+
+function buildDays() {
+  const container = document.getElementById('days-container');
+  let html = '';
+  DAYS_DATA.forEach((dd, idx) => {
+    const n = idx + 1;
+    if (n === 8) html += '<div class="week-label">Week 2 -- Intermediate Skills + Portfolio Ready</div>';
+    const d = getDayState(n);
+    const pct = getDayPct(n);
+    const done = isDayDone(n);
+
+    html += '<div class="day-card' + (done ? ' done' : '') + '" id="day-' + n + '">' +
+      '<div class="day-header" onclick="toggleDay(' + n + ')">' +
+        '<span class="day-number">DAY ' + String(n).padStart(2,'0') + '</span>' +
+        '<span class="day-title">' + dd.title + '</span>' +
+        '<span class="day-pct' + (pct >= 80 ? ' complete' : '') + '">' + pct + '%</span>' +
+        '<div class="day-tags">' + dd.tags.map(function(t) { return '<span class="tag ' + t + '">' + (t === 'math' ? 'MATH' : t === 'arch' ? 'ARCHVIZ' : 'REST') + '</span>'; }).join('') + '</div>' +
+        '<span class="chevron">▼</span>' +
+      '</div>' +
+      '<div class="day-body">';
+
+    if (dd.math) {
+      html += '<div class="section-label math-label">Flight Session -- Math <span class="time-badge">' + dd.mathPlanned + ' hr planned</span></div>' +
+        '<div class="math-block">' + dd.math + '</div>';
+    }
+    if (dd.arch) {
+      html += '<div class="section-label arch-label">Build Mission: ' + dd.buildMission + ' <span class="time-badge">' + dd.archPlanned + ' hrs planned</span></div>' +
+        '<div class="arch-block">' + dd.arch + '</div>';
+    }
+    if (dd.bridge) {
+      html += '<div class="section-label note-label">' + (dd.tags.indexOf('rest') >= 0 && !dd.math ? "Today's Instruction" : 'Bridge Note') + '</div>' +
+        '<div class="note-block">' + dd.bridge + '</div>';
+    }
+    if (dd.milestone) {
+      var parts = dd.milestone.split(':');
+      html += '<div class="milestone"><strong>' + parts[0] + ':</strong>' + parts.slice(1).join(':') + '</div>';
+    }
+
+    html += '<div class="flight-log">' +
+      '<div class="flight-log-title">✈ FLIGHT LOG // DAY ' + String(n).padStart(2,'0') + '</div>';
+
+    if (dd.mathPlanned > 0) {
+      html += '<div class="log-row">' +
+        '<label class="math-l">MATH</label>' +
+        '<input type="number" class="log-input" id="math-' + n + '" min="0" max="12" step="0.5" value="' + (d.mathHrs || '') + '" placeholder="0" onchange="logHours(' + n + ',\'math\',this.value)">' +
+        '<span class="log-unit">hrs</span>' +
+        '<span class="log-planned">/ ' + dd.mathPlanned + ' planned</span>' +
+      '</div>';
+    }
+    if (dd.archPlanned > 0) {
+      html += '<div class="log-row">' +
+        '<label class="arch-l">ARCHVIZ</label>' +
+        '<input type="number" class="log-input" id="arch-' + n + '" min="0" max="12" step="0.5" value="' + (d.archHrs || '') + '" placeholder="0" onchange="logHours(' + n + ',\'arch\',this.value)">' +
+        '<span class="log-unit">hrs</span>' +
+        '<span class="log-planned">/ ' + dd.archPlanned + ' planned</span>' +
+      '</div>';
+    }
+    if (dd.mathPlanned === 0 && dd.archPlanned === 0) {
+      html += '<div class="log-row"><label>REST DAY</label><span class="log-unit">No hours required. Mark when rested.</span></div>';
+    }
+
+    html += '<div class="day-progress">' +
+        '<div class="day-bar-bg"><div class="day-bar-fill" id="bar-' + n + '" style="width:' + pct + '%"></div></div>' +
+        '<span class="day-pct-label' + (pct >= 80 ? ' full' : '') + '" id="pct-' + n + '">' + pct + '%</span>' +
+      '</div>';
+
+    var sessions = state.sessions[n] || [];
+    html += '<div class="sessions-list" id="sessions-' + n + '">';
+    sessions.forEach(function(s) {
+      html += '<div class="session-entry">' +
+        '<span class="se-time">' + s.time + '</span>' +
+        '<span class="se-subject ' + s.subject + '">' + s.subject.toUpperCase() + '</span>' +
+        '<span>' + s.hrs + 'h</span>' +
+      '</div>';
+    });
+    html += '</div>';
+    if (dd.mathPlanned > 0 || dd.archPlanned > 0) {
+      html += '<button class="add-session-btn" onclick="addSession(' + n + ')">+ Log Session</button>';
+    }
+
+    html += '</div>';
+
+    html += '<div class="debrief">' +
+      '<div class="debrief-label">COMMS LOG // MISSION DEBRIEF</div>' +
+      '<textarea class="debrief-input" id="debrief-' + n + '" placeholder="What did you learn today? (transmission to Mission Control)" onchange="saveDebrief(' + n + ',this.value)">' + (state.debriefs[n] || '') + '</textarea>' +
+    '</div>';
+
+    var achievement = getAchievementText(n);
+    html += '<div class="achievement' + (achievement ? ' visible' : '') + '" id="ach-' + n + '">' + (achievement || '') + '</div>';
+
+    html += '</div></div>';
+  });
+  container.innerHTML = html;
+}
+
+function getAchievementText(n) {
+  var d = getDayState(n);
+  var dd = DAYS_DATA[n - 1];
+  var pct = getDayPct(n);
+  if (pct < 10) return null;
+
+  var parts = [];
+  if (d.mathHrs > 0) parts.push(d.mathHrs + 'h math flight logged');
+  if (d.archHrs > 0) parts.push(d.archHrs + 'h archviz build logged');
+
+  var planned = dd.mathPlanned + dd.archPlanned;
+  if (planned > 0 && pct >= 100) {
+    parts.push('<strong>BUILD MISSION: ' + dd.buildMission + ' -- COMPLETE</strong>');
+  } else if (planned > 0 && pct >= 50) {
+    parts.push('Mission ' + pct + '% complete. ' + (planned - d.mathHrs - d.archHrs).toFixed(1) + 'h remaining (carry forward).');
+  }
+
+  return parts.length > 0 ? parts.join(' // ') : null;
+}
+
+function logHours(n, type, val) {
+  var d = getDayState(n);
+  var v = parseFloat(val) || 0;
+  if (type === 'math') d.mathHrs = v;
+  else d.archHrs = v;
+  save();
+  updateAll();
+}
+
+function addSession(n) {
+  if (!state.sessions[n]) state.sessions[n] = [];
+  var now = new Date();
+  var time = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  var d = getDayState(n);
+  var dd = DAYS_DATA[n - 1];
+  var subject = dd.mathPlanned > 0 && (d.mathHrs <= d.archHrs || dd.archPlanned === 0) ? 'math' : 'arch';
+  state.sessions[n].push({ time: time, subject: subject, hrs: 0.5 });
+  save();
+  buildDays();
+}
+
+function saveDebrief(n, val) {
+  state.debriefs[n] = val;
+  save();
+}
+
+function toggleDay(n) {
+  document.getElementById('day-' + n).classList.toggle('open');
+}
+
+function updateAll() {
+  var mathHrs = getTotalMathHrs();
+  var archHrs = getTotalArchHrs();
+  var totalHrs = mathHrs + archHrs;
+  var streak = getStreak();
+  var patches = getEarnedPatches();
+  var callsign = getCallsign();
+  var alt = getAltitude();
+  var daysComplete = DAYS_DATA.filter(function(_, i) { return isDayDone(i + 1); }).length;
+
+  if (streak > state.bestStreak) { state.bestStreak = streak; save(); }
+
+  document.getElementById('callsign').textContent = 'CALLSIGN: ' + callsign;
+  document.getElementById('d-flight-hrs').textContent = totalHrs.toFixed(1);
+  document.getElementById('d-streak').innerHTML = streak + '🔥';
+  document.getElementById('d-days-left').textContent = 14 - daysComplete;
+  document.getElementById('d-patches').textContent = patches.size + '/' + PATCHES.length;
+
+  var plannedMath = getPlannedMathHrs();
+  var plannedArch = getPlannedArchHrs();
+  var plannedTotal = plannedMath + plannedArch;
+  var mathPct = plannedMath > 0 ? Math.min(100, Math.round(mathHrs / plannedMath * 100)) : 0;
+  var archPct = plannedArch > 0 ? Math.min(100, Math.round(archHrs / plannedArch * 100)) : 0;
+  var totalPct = plannedTotal > 0 ? Math.min(100, Math.round(totalHrs / plannedTotal * 100)) : 0;
+
+  setRing('ring-math', mathPct);
+  document.getElementById('ring-math-text').textContent = mathPct + '%';
+  setRing('ring-arch', archPct);
+  document.getElementById('ring-arch-text').textContent = archPct + '%';
+  setRing('ring-total', totalPct);
+  document.getElementById('ring-total-text').textContent = totalPct + '%';
+
+  var todayDocked = false;
+  for (var i = 1; i <= 14; i++) {
+    var d = getDayState(i);
+    var dd = DAYS_DATA[i - 1];
+    if (dd.mathPlanned > 0 && dd.archPlanned > 0 && d.mathHrs > 0 && d.archHrs > 0) {
+      if (d.mathHrs >= dd.mathPlanned && d.archHrs >= dd.archPlanned) { todayDocked = true; break; }
+    }
+  }
+  var anyActive = totalHrs > 0;
+  var dockEl = document.getElementById('dock-status');
+  var dockIcon = document.getElementById('dock-icon');
+  if (todayDocked) {
+    dockEl.className = 'dock-status docked'; dockEl.textContent = 'DOCKING COMPLETE';
+    dockIcon.textContent = '🔗';
+  } else if (anyActive) {
+    dockEl.className = 'dock-status awaiting'; dockEl.textContent = 'AWAITING ALIGNMENT';
+    dockIcon.textContent = '🛰';
+  } else {
+    dockEl.className = 'dock-status offline'; dockEl.textContent = 'SYSTEMS STANDBY';
+    dockIcon.textContent = '📡';
+  }
+
+  document.getElementById('alt-value').textContent = alt.label;
+  document.getElementById('alt-fill').style.width = alt.pct + '%';
+
+  var archPanels = Math.min(42, Math.round(archHrs));
+  document.getElementById('power-value').textContent = archPanels + ' / 42 panels';
+  var panelHtml = '';
+  for (var i = 0; i < 42; i++) {
+    panelHtml += '<div class="panel-cell' + (i < archPanels ? ' active' : '') + '"></div>';
+  }
+  document.getElementById('power-panels').innerHTML = panelHtml;
+
+  var hmLabels = '<span></span>';
+  for (var i = 1; i <= 14; i++) hmLabels += '<span>' + i + '</span>';
+  document.getElementById('hm-labels').innerHTML = hmLabels;
+
+  var hmHtml = '<div class="hm-label">MATH</div>';
+  for (var i = 1; i <= 14; i++) {
+    var d = getDayState(i);
+    hmHtml += '<div class="hm-cell' + (d.mathHrs > 0 ? ' math-active' : '') + '"></div>';
+  }
+  hmHtml += '<div class="hm-label">ARCH</div>';
+  for (var i = 1; i <= 14; i++) {
+    var d = getDayState(i);
+    hmHtml += '<div class="hm-cell' + (d.archHrs > 0 ? ' arch-active' : '') + '"></div>';
+  }
+  document.getElementById('heatmap').innerHTML = hmHtml;
+
+  var patchHtml = '';
+  PATCHES.forEach(function(p) {
+    var earned = patches.has(p.id);
+    patchHtml += '<div class="patch' + (earned ? ' earned' : '') + '" title="' + p.desc + '">' +
+      '<span class="patch-icon">' + p.icon + '</span>' +
+      '<span class="patch-name">' + p.name + '</span>' +
+    '</div>';
+  });
+  document.getElementById('patches').innerHTML = patchHtml;
+
+  var maydayGap = getMaydayDays();
+  var maydayEl = document.getElementById('mayday');
+  if (maydayGap >= 2) {
+    maydayEl.classList.add('visible');
+    document.getElementById('mayday-text').textContent = maydayGap + ' days without flight hours logged. Resume to maintain certification.';
+  } else {
+    maydayEl.classList.remove('visible');
+  }
+
+  DAYS_DATA.forEach(function(dd, idx) {
+    var n = idx + 1;
+    var pct = getDayPct(n);
+    var done = isDayDone(n);
+    var card = document.getElementById('day-' + n);
+    if (!card) return;
+    if (done) card.classList.add('done'); else card.classList.remove('done');
+    var pctEl = card.querySelector('.day-pct');
+    if (pctEl) { pctEl.textContent = pct + '%'; pctEl.className = 'day-pct' + (pct >= 80 ? ' complete' : ''); }
+    var barEl = document.getElementById('bar-' + n);
+    if (barEl) barEl.style.width = pct + '%';
+    var pctLabel = document.getElementById('pct-' + n);
+    if (pctLabel) { pctLabel.textContent = pct + '%'; pctLabel.className = 'day-pct-label' + (pct >= 80 ? ' full' : ''); }
+    var achEl = document.getElementById('ach-' + n);
+    if (achEl) {
+      var txt = getAchievementText(n);
+      if (txt) { achEl.innerHTML = txt; achEl.classList.add('visible'); }
+      else { achEl.classList.remove('visible'); }
+    }
+  });
+
+  updateWeekStats(1, 7, 'week1-stats', 'w1');
+  updateWeekStats(8, 14, 'week2-stats', 'w2');
+
+  if (daysComplete >= 14) {
+    document.getElementById('reentry').classList.add('visible');
+    document.getElementById('re-callsign').textContent = callsign;
+    document.getElementById('re-hours').textContent = totalHrs.toFixed(1);
+    document.getElementById('re-patches').textContent = patches.size;
+    document.getElementById('re-streak').textContent = state.bestStreak;
+  }
+}
+
+function updateWeekStats(start, end, containerId, prefix) {
+  var totalH = 0, mathH = 0, archH = 0, bestDay = 0, bestDayN = '--', daysActive = 0;
+  for (var i = start; i <= end; i++) {
+    var d = getDayState(i);
+    var dayTotal = (d.mathHrs || 0) + (d.archHrs || 0);
+    totalH += dayTotal;
+    mathH += d.mathHrs || 0;
+    archH += d.archHrs || 0;
+    if (dayTotal > bestDay) { bestDay = dayTotal; bestDayN = 'Day ' + i; }
+    if (dayTotal > 0) daysActive++;
+  }
+  var container = document.getElementById(containerId);
+  if (daysActive > 0) {
+    container.classList.add('visible');
+    document.getElementById(prefix + '-hours').textContent = totalH.toFixed(1);
+    var split = totalH > 0 ? Math.round(mathH / totalH * 100) : 0;
+    document.getElementById(prefix + '-split').textContent = split + '/' + (100 - split);
+    document.getElementById(prefix + '-best').textContent = bestDayN;
+    document.getElementById(prefix + '-streak').textContent = daysActive + ' days';
+  }
+}
+
+function setRing(id, pct) {
+  var el = document.getElementById(id);
+  var circumference = 314;
+  el.setAttribute('stroke-dashoffset', circumference - (pct / 100 * circumference));
+}
+
+function runLaunchSequence() {
+  if (state.launched) {
+    document.getElementById('launch-overlay').classList.add('hidden');
+    return;
+  }
+  var lines = [
+    'T-MINUS 14 DAYS',
+    'ALL SYSTEMS NOMINAL',
+    'MATH FLIGHT COMPUTER .......... ONLINE',
+    'ARCHVIZ BUILD ENGINE .......... ONLINE',
+    'MISSION PATCHES ............... ARMED',
+    'ALTITUDE TRACKER .............. CALIBRATED',
+    '',
+    'READY FOR LAUNCH, CADET.'
+  ];
+  var el = document.getElementById('launch-text');
+  var i = 0;
+  function nextLine() {
+    if (i < lines.length) {
+      el.innerHTML += lines[i] + '<br>';
+      i++;
+      setTimeout(nextLine, 400);
+    } else {
+      document.getElementById('launch-btn').style.display = 'inline-block';
+    }
+  }
+  setTimeout(nextLine, 600);
+}
+
+function dismissLaunch() {
+  state.launched = true;
+  save();
+  document.getElementById('launch-overlay').classList.add('hidden');
+}
+
+buildDays();
+updateAll();
+runLaunchSequence();
+</script>
 </body>
 </html>
