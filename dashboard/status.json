@@ -186,27 +186,27 @@
     }
   ],
   "research": {
-    "updatedAt": "2026-09-24T15:50:22.429Z",
+    "updatedAt": "2026-09-24T16:07:04.895Z",
     "round": {
       "id": 1491833,
-      "phase": "research",
+      "phase": "distribution",
       "startedAt": 1790264475737,
       "researchEndsAt": 1790265975737,
       "distributionEndsAt": 1790266275737,
-      "secondsRemaining": 954,
-      "latestClosedEpoch": 1491832,
+      "secondsRemaining": 253,
+      "latestClosedEpoch": 1491833,
       "treasuryAddress": "7qC3CU2DhtMasevaMAG4hUjbrJZwMiPZcUeU29aNgEVr",
       "solanaWallet": "8dB9Da6dv4nUhTtMRUEezPrbBQMU1MECNTX9MzdPRx3f"
     },
     "summary": {
       "total_submissions": 5,
       "current_round_submissions": 2,
-      "pending_payout_submissions": 2,
-      "confirmed_paid_submissions": 0,
-      "total_allocated_points": 30,
-      "total_allocated_ppm": 6892,
-      "expected_metax": "0.00017850",
-      "confirmed_metax": "0.00000000"
+      "pending_payout_submissions": 1,
+      "confirmed_paid_submissions": 1,
+      "total_allocated_points": 15,
+      "total_allocated_ppm": 3446,
+      "expected_metax": "0.00008925",
+      "confirmed_metax": "0.00002818"
     },
     "submissions": [
       {
@@ -268,14 +268,18 @@
         "workType": "evidence-extraction",
         "paperSection": "residual-disease",
         "reviewTargetId": null,
-        "status": "pending_payout",
-        "statusLabel": "Scored & Allocated (Pending Payout)",
+        "status": "confirmed_paid",
+        "statusLabel": "Confirmed Paid On-Chain",
         "score": 15,
         "allocationPpm": 3446,
         "calculationHash": "559603252753c6f9b3f85543aa58d1d76c81ec65c877f45144d50859240f7539",
         "expectedPayout": "~0.00008925 METAx (batch queued)",
         "abstract": "Phase III 1,600-patient protocol audit evaluating T-DXd vs T-DM1 IDFS, BMFS, and interstitial lung disease (ILD) safety profile in post-neoadjuvant residual HER2+ early breast cancer. Verified submission 5b7b0266-8ed1-4f30-b338-8e8929fc9fe0 featured on live activity stream and scored in Epoch 1491831 (calc hash: 55960325...).",
-        "submittedAt": "2026-09-24T14:49:15.000Z"
+        "submittedAt": "2026-09-24T14:49:15.000Z",
+        "txSignature": "2KBULY2RpMuu8koGVFuzAkjLBDPmZNXssauwrYRFeWDd5okBVLzagVwVLDScrBX4vWSuoDYQh75TBuqkJcXygmUi",
+        "solscanUrl": "https://solscan.io/tx/2KBULY2RpMuu8koGVFuzAkjLBDPmZNXssauwrYRFeWDd5okBVLzagVwVLDScrBX4vWSuoDYQh75TBuqkJcXygmUi",
+        "paidAmount": "0.0000281 METAx",
+        "paidAt": "2026-09-24T15:53:31.000Z"
       },
       {
         "id": "f7567cc3-13c5-4223-8d1d-8cbf82fb6739",
@@ -293,6 +297,22 @@
         "expectedPayout": "~0.00008925 METAx (batch queued)",
         "abstract": "Full trial extraction of 1,486-patient randomized phase III T-DM1 vs Trastuzumab 3-yr IDFS (88.3% vs 77.0%, HR 0.50, P<0.001) with persistent CNS recurrence audit (5.9% vs 4.3%). Verified submission f7567cc3-13c5-4223-8d1d-8cbf82fb6739 accepted and scored in Epoch 1491831. Allocation: 15 points (3,446 ppm pool share, calc hash: 55960325...). SE(ln HR)=0.0946.",
         "submittedAt": "2026-09-24T14:48:10.000Z"
+      }
+    ],
+    "payouts": [
+      {
+        "signature": "2KBULY2RpMuu8koGVFuzAkjLBDPmZNXssauwrYRFeWDd5okBVLzagVwVLDScrBX4vWSuoDYQh75TBuqkJcXygmUi",
+        "blockTime": 1790265211,
+        "slot": 450075113,
+        "amount": "0.0000281",
+        "token": "METAx",
+        "mint": "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu",
+        "from": "7qC3CU2DhtMasevaMAG4hUjbrJZwMiPZcUeU29aNgEVr",
+        "to": "8dB9Da6dv4nUhTtMRUEezPrbBQMU1MECNTX9MzdPRx3f",
+        "ata": "Hn8mASFN9GYFWkUMV6AhrMY8vRBUzyKErZ7CkbGfjabN",
+        "status": "FINALIZED ON SOLANA",
+        "solscanUrl": "https://solscan.io/tx/2KBULY2RpMuu8koGVFuzAkjLBDPmZNXssauwrYRFeWDd5okBVLzagVwVLDScrBX4vWSuoDYQh75TBuqkJcXygmUi",
+        "recordedAt": "2026-09-24T16:05:15.820Z"
       }
     ]
   }
