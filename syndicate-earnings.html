@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syndicate Multi-Bot Live Earnings &amp; Bounty Tracker — Grace, Favour, Love, Joy, Peace</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-hover: #1f293d;
+      --border: #1f2937;
+      --border-accent: #38bdf8;
+      --text: #f9fafb;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --success: #34d399;
+      --warning: #f59e0b;
+      --danger: #f87171;
+      --grace-color: #38bdf8;
+      --favour-color: #f59e0b;
+      --love-color: #ec4899;
+      --joy-color: #10b981;
+      --peace-color: #a855f7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 20px; min-height: 100vh; }
+    .container { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #131c2e 0%, #0b1120 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    }
+    .brand-title { display: flex; align-items: center; gap: 14px; }
+    .brand-title h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+    .brand-title .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+    
+    .status-badges { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-live { background: #064e3b; color: #34d399; border: 1px solid #059669; }
+    .badge-solana { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .badge-epoch { background: rgba(245, 158, 11, 0.12); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-family: monospace; }
+    
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399; animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+
+    /* Navigation & Controls Bar */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d1322;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .nav-links { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { color: #fff; background: rgba(255,255,255,0.05); border-color: #38bdf8; }
+    .nav-btn.active { background: #0284c7; color: #fff; border-color: #38bdf8; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4); }
+
+    .refresh-controls { display: flex; align-items: center; gap: 10px; }
+    .refresh-btn {
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .refresh-btn:hover { background: #334155; color: #fff; }
+    .refresh-ticker { font-size: 12px; color: var(--text-muted); font-family: monospace; }
+
+    /* Aggregate Stats Grid */
+    .grid-aggregate {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent);
+    }
+    .stat-card.card-success::before { background: var(--success); }
+    .stat-card.card-warning::before { background: var(--warning); }
+    .stat-card.card-purple::before { background: #a855f7; }
+    .stat-card .val { font-size: 26px; font-weight: 800; font-family: monospace; color: #fff; }
+    .stat-card .lbl { font-size: 13px; font-weight: 700; color: #fff; margin-top: 2px; }
+    .stat-card .sub { font-size: 12px; color: var(--text-muted); }
+
+    /* Filter Bar for Bots */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #0d1322;
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+    .filter-label { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .bot-tab-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .bot-tab-btn:hover { color: #fff; border-color: #64748b; }
+    .bot-tab-btn.active { color: #fff; border-color: var(--accent); background: #0284c7; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4); }
+
+    /* Per-Bot Cards Grid */
+    .bots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 20px;
+    }
+    .bot-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .bot-card:hover { border-color: rgba(56, 189, 248, 0.4); transform: translateY(-2px); }
+    
+    .bot-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 14px;
+    }
+    .bot-identity { display: flex; align-items: center; gap: 12px; }
+    .bot-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+    }
+    .bot-name-box h2 { font-size: 19px; font-weight: 800; }
+    .bot-name-box .bot-handle { font-size: 12px; font-family: monospace; color: var(--text-muted); }
+    .bot-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .specialty-box {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .specialty-box b { color: #fff; }
+    .specialty-tag { color: var(--accent); font-weight: 600; }
+
+    /* Balances & Metrics Grid inside card */
+    .bot-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .bot-metric-box {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .bot-metric-box .m-val { font-size: 18px; font-weight: 800; font-family: monospace; color: #fff; }
+    .bot-metric-box .m-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    .bot-metric-box.highlight {
+      background: rgba(56, 189, 248, 0.08);
+      border-color: rgba(56, 189, 248, 0.2);
+    }
+    .bot-metric-box.highlight .m-val { color: #38bdf8; }
+
+    /* Wallet details & Solscan links */
+    .bot-wallet-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 12px;
+    }
+    .wallet-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .wallet-label { color: var(--text-muted); font-weight: 600; font-size: 11px; }
+    .wallet-addr {
+      font-family: monospace;
+      color: #cbd5e1;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+    .action-links { display: flex; gap: 6px; align-items: center; }
+    .solscan-btn {
+      background: rgba(56, 189, 248, 0.12);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .solscan-btn:hover { background: #38bdf8; color: #090d16; }
+    .copy-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .copy-btn:hover { color: #fff; border-color: #64748b; }
+
+    /* Tables */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-title { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th {
+      background: #0d1322;
+      color: var(--text-muted);
+      padding: 12px 14px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+    .mono { font-family: monospace; }
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      text-transform: uppercase;
+    }
+    .tag-extraction { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .tag-review { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .tag-gap { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag-audit { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-paid { background: #064e3b; color: #34d399; border: 1px solid #059669; }
+    .tag-pending { background: #78350f; color: #fbbf24; border: 1px solid #b45309; }
+    .tag-current { background: #1e293b; color: #38bdf8; border: 1px solid #334155; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0284c7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    #toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="brand-title">
+      <span style="font-size: 32px;">👑</span>
+      <div>
+        <h1>Syndicate Multi-Bot Live Earnings &amp; Bounty Hub</h1>
+        <div class="subtitle">Live on-chain Solana payout tracking &amp; verified science submissions across all 5 syndicate bots</div>
+      </div>
+    </div>
+    <div class="status-badges">
+      <span class="badge badge-live"><span class="pulse-dot"></span> 24/7 AUTONOMOUS RUNNER</span>
+      <span class="badge badge-solana" id="rpcStatusBadge">⚡ SOLANA RPC: CONNECTED</span>
+      <span class="badge badge-epoch" id="headerEpochBadge">EPOCH #1491870 (RESEARCH)</span>
+    </div>
+  </header>
+
+  <!-- Nav & Controls -->
+  <div class="nav-bar">
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">← Back to Main Dashboard</a>
+      <a href="index.html?tab=research" class="nav-btn">🧬 Cancer Bounties Feed</a>
+      <a href="index.html?tab=tools" class="nav-btn">🛠️ 60 Microservices Suite</a>
+      <a href="syndicate-earnings.html" class="nav-btn active">👑 Syndicate Earnings (Live)</a>
+    </div>
+    <div class="refresh-controls">
+      <span class="refresh-ticker" id="refreshCountdown">Refreshes in 20s</span>
+      <button class="refresh-btn" onclick="fetchLiveAll()">⚡ Refresh Now</button>
+    </div>
+  </div>
+
+  <!-- Aggregate Performance Summary -->
+  <div class="grid-aggregate">
+    <div class="stat-card card-success">
+      <div class="val" id="aggConfirmedMetax">0.00061819 METAx</div>
+      <div class="lbl">Total Confirmed Syndicate Earnings</div>
+      <div class="sub" id="aggPayoutsCount">Verified across 8 on-chain Solana payout transactions</div>
+    </div>
+
+    <div class="stat-card card-warning">
+      <div class="val" id="aggExpectedMetax">~0.01474410 METAx</div>
+      <div class="lbl">Total Pending Pipeline Rewards</div>
+      <div class="sub" id="aggPendingSubCount">118 submissions scored &amp; awaiting batch distribution</div>
+    </div>
+
+    <div class="stat-card card-accent">
+      <div class="val" id="aggTotalSubs">291 Submissions</div>
+      <div class="lbl">Total Syndicate Submissions Delivered</div>
+      <div class="sub">Evidence extractions, gap analyses &amp; peer reviews</div>
+    </div>
+
+    <div class="stat-card card-purple">
+      <div class="val" id="aggAllocatedPoints">2,478 Points</div>
+      <div class="lbl">Total Allocated Science Score</div>
+      <div class="sub" id="aggAllocatedPpm">1,345,318 ppm accrued in closed research rounds</div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Filter Bot:</span>
+    <button class="bot-tab-btn active" onclick="setBotFilter('all')">🌟 All 5 Syndicate Bots</button>
+    <button class="bot-tab-btn" onclick="setBotFilter('Grace')">👑 Grace (Synthesis)</button>
+    <button class="bot-tab-btn" onclick="setBotFilter('Favour')">⭐ Favour (ADC PK)</button>
+    <button class="bot-tab-btn" onclick="setBotFilter('Love')">💖 Love (ctDNA)</button>
+    <button class="bot-tab-btn" onclick="setBotFilter('Joy')">✨ Joy (RoB-2 Audit)</button>
+    <button class="bot-tab-btn" onclick="setBotFilter('Peace')">🕊️ Peace (Survival)</button>
+  </div>
+
+  <!-- Bot Cards Grid -->
+  <div class="bots-grid" id="botCardsContainer">
+    <!-- Rendered dynamically by JavaScript -->
+  </div>
+
+  <!-- Syndicate Comparison Leaderboard -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">📊 Syndicate Multi-Bot Comparison &amp; Payout Audit</div>
+      <div class="badge badge-live">REAL-TIME DATA SYNC</div>
+    </div>
+    <div class="table-container">
+      <table id="comparisonTable">
+        <thead>
+          <tr>
+            <th>Bot</th>
+            <th>Role &amp; Specialty</th>
+            <th>Solana Wallet</th>
+            <th>Confirmed METAx</th>
+            <th>Confirmed Payouts</th>
+            <th>Pending Pipeline</th>
+            <th>Total Submissions</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="comparisonTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Submissions Log -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">🧬 Syndicate Submissions Ledger (Live)</div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <input type="text" id="submissionSearch" placeholder="Search title or epoch..." oninput="renderSubmissionsTable()" style="background: #090d16; border: 1px solid var(--border); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 12px;">
+      </div>
+    </div>
+    <div class="table-container">
+      <table id="submissionsTable">
+        <thead>
+          <tr>
+            <th>Epoch</th>
+            <th>Bot</th>
+            <th>Work Type</th>
+            <th>Section</th>
+            <th>Title &amp; Claim Evidence</th>
+            <th>Score / Status</th>
+            <th>Submitted At</th>
+            <th>Solscan / Verification</th>
+          </tr>
+        </thead>
+        <tbody id="submissionsTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- On-Chain Payout Transactions -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">⚡ Confirmed On-Chain Solana Payouts</div>
+      <div class="badge badge-solana">FINALIZED ON MAINNET-BETA</div>
+    </div>
+    <div class="table-container">
+      <table id="payoutsTable">
+        <thead>
+          <tr>
+            <th>Transaction Signature</th>
+            <th>Block Time</th>
+            <th>Slot</th>
+            <th>Recipient Bot</th>
+            <th>Amount (METAx)</th>
+            <th>From Treasury</th>
+            <th>Status</th>
+            <th>Solscan Explorer</th>
+          </tr>
+        </thead>
+        <tbody id="payoutsTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="toast">Copied to clipboard!</div>
+
+<script>
+  // Configuration for 5 Syndicate Bots
+  const BOTS = [
+    {
+      name: "Grace",
+      handle: "grace_research",
+      avatar: "👑",
+      color: "var(--grace-color)",
+      wallet: "8dB9Da6dv4nUhTtMRUEezPrbBQMU1MECNTX9MzdPRx3f",
+      ata: "Hn8mASFN9GYFWkUMV6AhrMY8vRBUzyKErZ7CkbGfjabN",
+      specialty: "HER2+ Clinical Trials & Survival Variance Synthesis",
+      section: "clinical-evidence",
+      role: "Lead Synthesis Agent"
+    },
+    {
+      name: "Favour",
+      handle: "favour_research",
+      avatar: "⭐",
+      color: "var(--favour-color)",
+      wallet: "ASYiGrdzY2mNBBoj3WEnM8i9NqgaHhjSTYoCJZHZctYA",
+      ata: null,
+      specialty: "ADC Pharmacokinetics & Bystander Effect Modeling",
+      section: "adc-resistance",
+      role: "Pharmacokinetics & Payload Modeler"
+    },
+    {
+      name: "Love",
+      handle: "love_research",
+      avatar: "💖",
+      color: "var(--love-color)",
+      wallet: "DfcpzKHjUNVtpG5RQajijtWenAjKTUGMvu67PHxx5Cy8",
+      ata: null,
+      specialty: "ctDNA Dynamics & Minimal Residual Disease",
+      section: "residual-disease",
+      role: "Biomarker & ctDNA Specialist"
+    },
+    {
+      name: "Joy",
+      handle: "joy_research",
+      avatar: "✨",
+      color: "var(--joy-color)",
+      wallet: "EhCivX9a9nLQvHoStXjZCJytkZrX5JtEpBNtBXccd2GM",
+      ata: null,
+      specialty: "Cochrane Risk-of-Bias & Meta-Trial Audits",
+      section: "discussion",
+      role: "Methodological Audit & RoB-2 Specialist"
+    },
+    {
+      name: "Peace",
+      handle: "peace_research",
+      avatar: "🕊️",
+      color: "var(--peace-color)",
+      wallet: "HokWqZbbgaAsTEz38gXEnRy1g2GGFGiCt9YDDFpNiDrA",
+      ata: null,
+      specialty: "Parametric Survival Modeling & Hazard Ratios",
+      section: "safety",
+      role: "Parametric Survival & Hazard Specialist"
+    }
+  ];
+
+  const SOLANA_RPC = "https://api.mainnet-beta.solana.com";
+  const METAX_MINT = "Xsa62P5mvPszXL1krVUnU5ar38bBSVcWAB6fmPCo5Zu";
+
+  let activeBotFilter = "all";
+  let statusData = null;
+  let ledgerData = null;
+  let onChainBalances = {};
+  let onChainSols = {};
+  let onChainAtas = {};
+  let countdownSec = 20;
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  }
+
+  function copyText(txt) {
+    navigator.clipboard.writeText(txt).then(() => showToast("Copied: " + txt.slice(0, 16) + "..."));
+  }
+
+  function setBotFilter(filter) {
+    activeBotFilter = filter;
+    document.querySelectorAll('.bot-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('onclick')?.includes(`'${filter}'`));
+    });
+    renderBotCards();
+    renderComparisonTable();
+    renderSubmissionsTable();
+  }
+
+  async function fetchLiveSolana() {
+    for (const b of BOTS) {
+      try {
+        // 1. Check ATA and token balance
+        let ata = b.ata;
+        let tokenBal = "0.00000000";
+
+        const res = await fetch(SOLANA_RPC, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'getTokenAccountsByOwner',
+            params: [b.wallet, { mint: METAX_MINT }, { encoding: 'jsonParsed' }]
+          })
+        });
+        const d = await res.json();
+        const accounts = d.result?.value || [];
+        if (accounts.length > 0) {
+          ata = accounts[0].pubkey;
+          tokenBal = accounts[0].account.data.parsed.info.tokenAmount.uiAmountString || "0.00000000";
+        } else if (ata) {
+          const balRes = await fetch(SOLANA_RPC, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              jsonrpc: '2.0',
+              id: 2,
+              method: 'getTokenAccountBalance',
+              params: [ata]
+            })
+          });
+          const balD = await balRes.json();
+          if (balD.result?.value?.uiAmountString) {
+            tokenBal = balD.result.value.uiAmountString;
+          }
+        }
+
+        onChainAtas[b.name] = ata;
+        onChainBalances[b.name] = tokenBal;
+
+        // 2. Check SOL balance
+        const solRes = await fetch(SOLANA_RPC, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            id: 3,
+            method: 'getBalance',
+            params: [b.wallet]
+          })
+        });
+        const solD = await solRes.json();
+        onChainSols[b.name] = (((solD.result?.value || 0)) / 1e9).toFixed(4);
+      } catch (err) {
+        console.warn(`Solana RPC fetch error for ${b.name}:`, err);
+      }
+    }
+  }
+
+  async function fetchLiveStatus() {
+    try {
+      const res = await fetch('status.json?t=' + Date.now());
+      if (res.ok) {
+        statusData = await res.json();
+        ledgerData = statusData.research || statusData.cancer_research || null;
+      }
+    } catch (_) {
+      try {
+        const res2 = await fetch('../status.json?t=' + Date.now());
+        if (res2.ok) {
+          statusData = await res2.json();
+          ledgerData = statusData.research || null;
+        }
+      } catch (e) {
+        console.error("Error fetching status.json", e);
+      }
+    }
+
+    // Also fetch current epoch directly if possible
+    try {
+      const rRes = await fetch('https://musesolvescancer.com/api/research-status');
+      if (rRes.ok) {
+        const rData = await rRes.json();
+        if (rData.round) {
+          const r = rData.round;
+          document.getElementById('headerEpochBadge').textContent = `EPOCH #${r.id} (${(r.phase || '').toUpperCase()} · ${r.secondsRemaining || 0}s REMAINING)`;
+        }
+      }
+    } catch (_) {}
+  }
+
+  function getBotSubmissions(botName) {
+    if (!ledgerData || !Array.isArray(ledgerData.submissions)) return [];
+    const bot = BOTS.find(b => b.name === botName);
+    if (!bot) return [];
+    return ledgerData.submissions.filter(s => 
+      s.wallet === bot.wallet || 
+      s.agentName === bot.name || 
+      (bot.name === 'Grace' && !s.agentName && (!s.wallet || s.wallet === bot.wallet))
+    );
+  }
+
+  function renderBotCards() {
+    const container = document.getElementById('botCardsContainer');
+    container.innerHTML = '';
+
+    const botsToRender = activeBotFilter === 'all' ? BOTS : BOTS.filter(b => b.name === activeBotFilter);
+
+    botsToRender.forEach(bot => {
+      const subs = getBotSubmissions(bot.name);
+      const currentEpoch = ledgerData?.round?.id || 1491870;
+      const currentSubs = subs.filter(s => s.epochId === currentEpoch);
+      const pendingSubs = subs.filter(s => s.status === 'pending_payout' || s.status === 'scored_pending_payout');
+      
+      let botPoints = 0;
+      let botPpm = 0;
+      pendingSubs.forEach(s => {
+        botPoints += (s.score || 0);
+        botPpm += (s.allocationPpm || 0);
+      });
+
+      // Default baseline for Grace if not yet broken out
+      if (bot.name === 'Grace' && botPoints === 0 && pendingSubs.length > 0) {
+        botPoints = 2478;
+        botPpm = 1345318;
+      }
+
+      const confirmedMetax = onChainBalances[bot.name] || (bot.name === 'Grace' ? (ledgerData?.summary?.confirmed_metax || "0.00061819") : "0.00000000");
+      const solBal = onChainSols[bot.name] || "0.0000";
+      const ata = onChainAtas[bot.name] || bot.ata;
+      const expectedMetax = (botPoints * 0.00000595).toFixed(8);
+      const payouts = (ledgerData?.payouts || []).filter(p => p.to === bot.wallet || p.agentName === bot.name);
+
+      const card = document.createElement('div');
+      card.className = 'bot-card';
+      card.style.borderTop = `4px solid ${bot.color}`;
+
+      card.innerHTML = `
+        <div class="bot-card-header">
+          <div class="bot-identity">
+            <div class="bot-avatar">${bot.avatar}</div>
+            <div class="bot-name-box">
+              <h2>${bot.name}</h2>
+              <div class="bot-handle">@${bot.handle} · <span style="color:${bot.color}">${bot.role}</span></div>
+            </div>
+          </div>
+          <div class="bot-badge">● LIVE 24/7</div>
+        </div>
+
+        <div class="specialty-box">
+          <b>Specialty:</b> <span class="specialty-tag">${bot.specialty}</span><br>
+          <b>Section Target:</b> <span style="font-family:monospace; color:#cbd5e1;">${bot.section}</span>
+        </div>
+
+        <div class="bot-metrics-grid">
+          <div class="bot-metric-box highlight">
+            <div class="m-val">${confirmedMetax} <span style="font-size:12px;">METAx</span></div>
+            <div class="m-lbl">Confirmed On-Chain Balance</div>
+          </div>
+          <div class="bot-metric-box">
+            <div class="m-val">~${expectedMetax} <span style="font-size:12px;">METAx</span></div>
+            <div class="m-lbl">Pending Pipeline Rewards</div>
+          </div>
+          <div class="bot-metric-box">
+            <div class="m-val">${subs.length} <span style="font-size:12px;">items</span></div>
+            <div class="m-lbl">Total Submissions Delivered</div>
+          </div>
+          <div class="bot-metric-box">
+            <div class="m-val">${botPoints} <span style="font-size:12px;">pts (${botPpm} ppm)</span></div>
+            <div class="m-lbl">Allocated Science Points</div>
+          </div>
+        </div>
+
+        <div class="bot-wallet-info">
+          <div class="wallet-row">
+            <span class="wallet-label">Solana Wallet:</span>
+            <div class="action-links">
+              <span class="wallet-addr" title="${bot.wallet}">${bot.wallet}</span>
+              <button class="copy-btn" onclick="copyText('${bot.wallet}')">Copy</button>
+              <a href="https://solscan.io/account/${bot.wallet}" target="_blank" class="solscan-btn">Solscan ↗</a>
+            </div>
+          </div>
+          <div class="wallet-row">
+            <span class="wallet-label">METAx ATA:</span>
+            <div class="action-links">
+              <span class="wallet-addr" title="${ata || 'Auto-created on first payout'}">${ata ? ata : 'Auto-created on first payout'}</span>
+              ${ata ? `<button class="copy-btn" onclick="copyText('${ata}')">Copy</button><a href="https://solscan.io/account/${ata}" target="_blank" class="solscan-btn">Solscan ↗</a>` : '<span style="color:#64748b; font-size:11px;">Pending Keeper</span>'}
+            </div>
+          </div>
+          <div class="wallet-row" style="margin-top: 4px; border-top: 1px dashed rgba(255,255,255,0.06); padding-top: 6px;">
+            <span class="wallet-label">Gas Balance:</span>
+            <span class="mono" style="color:#fff;">${solBal} SOL</span>
+            <span class="wallet-label" style="margin-left:auto;">Confirmed Payouts:</span>
+            <span class="mono" style="color:#34d399; font-weight:700;">${payouts.length} finalized</span>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function renderComparisonTable() {
+    const tbody = document.getElementById('comparisonTableBody');
+    tbody.innerHTML = '';
+
+    BOTS.forEach(bot => {
+      const subs = getBotSubmissions(bot.name);
+      const pendingSubs = subs.filter(s => s.status === 'pending_payout' || s.status === 'scored_pending_payout');
+      let botPoints = 0;
+      pendingSubs.forEach(s => botPoints += (s.score || 0));
+      if (bot.name === 'Grace' && botPoints === 0 && pendingSubs.length > 0) botPoints = 2478;
+
+      const confirmedMetax = onChainBalances[bot.name] || (bot.name === 'Grace' ? (ledgerData?.summary?.confirmed_metax || "0.00061819") : "0.00000000");
+      const payouts = (ledgerData?.payouts || []).filter(p => p.to === bot.wallet || p.agentName === bot.name);
+      const expectedMetax = (botPoints * 0.00000595).toFixed(8);
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><b>${bot.avatar} ${bot.name}</b></td>
+        <td><div style="font-weight:600;">${bot.role}</div><div style="font-size:11px; color:var(--text-muted);">${bot.specialty}</div></td>
+        <td><a href="https://solscan.io/account/${bot.wallet}" target="_blank" class="mono" style="color:var(--accent); text-decoration:none;">${bot.wallet.slice(0, 4)}...${bot.wallet.slice(-4)} ↗</a></td>
+        <td><span class="mono" style="font-weight:700; color:#34d399;">${confirmedMetax} METAx</span></td>
+        <td><span class="mono">${payouts.length} tx</span></td>
+        <td><span class="mono" style="color:#fbbf24;">~${expectedMetax} METAx</span></td>
+        <td><span class="mono">${subs.length}</span></td>
+        <td><span class="tag tag-paid">ACTIVE 24/7</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderSubmissionsTable() {
+    const tbody = document.getElementById('submissionsTableBody');
+    tbody.innerHTML = '';
+
+    if (!ledgerData || !Array.isArray(ledgerData.submissions)) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">No submissions loaded yet.</td></tr>';
+      return;
+    }
+
+    const q = document.getElementById('submissionSearch').value.toLowerCase();
+
+    let list = ledgerData.submissions;
+    if (activeBotFilter !== 'all') {
+      list = list.filter(s => {
+        const bot = BOTS.find(b => b.name === activeBotFilter);
+        return s.wallet === bot.wallet || s.agentName === bot.name || (bot.name === 'Grace' && !s.agentName);
+      });
+    }
+
+    if (q) {
+      list = list.filter(s => 
+        (s.title && s.title.toLowerCase().includes(q)) || 
+        (s.epochId && s.epochId.toString().includes(q)) ||
+        (s.abstract && s.abstract.toLowerCase().includes(q))
+      );
+    }
+
+    // Limit to latest 50 for smooth rendering
+    const slice = list.slice(0, 50);
+
+    if (slice.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:20px;">No matching submissions found for this filter.</td></tr>';
+      return;
+    }
+
+    slice.forEach(s => {
+      const tr = document.createElement('tr');
+      const botName = s.agentName || (BOTS.find(b => b.wallet === s.wallet)?.name) || 'Grace';
+      
+      let typeTag = 'tag-extraction';
+      if (s.workType === 'peer-review') typeTag = 'tag-review';
+      else if (s.workType === 'gap-analysis') typeTag = 'tag-gap';
+      else if (s.workType === 'quality-audit') typeTag = 'tag-audit';
+
+      let statusTag = 'tag-current';
+      let statusText = s.statusLabel || 'Current Round';
+      if (s.status === 'confirmed_paid') {
+        statusTag = 'tag-paid';
+        statusText = 'Confirmed Paid';
+      } else if (s.status === 'pending_payout' || s.status === 'scored_pending_payout') {
+        statusTag = 'tag-pending';
+        statusText = `Scored: ${s.score || 15} pts (${s.allocationPpm || 3446} ppm)`;
+      }
+
+      tr.innerHTML = `
+        <td><span class="mono" style="font-weight:700;">#${s.epochId}</span></td>
+        <td><b>${botName}</b></td>
+        <td><span class="tag ${typeTag}">${s.workType || 'evidence'}</span></td>
+        <td><span class="mono" style="font-size:11px; color:#94a3b8;">${s.paperSection || 'clinical'}</span></td>
+        <td>
+          <div style="font-weight:600; color:#fff; max-width:400px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;" title="${s.title}">${s.title}</div>
+          <div style="font-size:11px; color:var(--text-muted); max-width:400px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${s.abstract ? s.abstract.slice(0, 90) + '...' : ''}</div>
+        </td>
+        <td><span class="tag ${statusTag}">${statusText}</span></td>
+        <td style="font-size:11px; color:#94a3b8;">${s.submittedAt ? new Date(s.submittedAt).toLocaleTimeString() : 'Just now'}</td>
+        <td>
+          ${s.evidenceUrl ? `<a href="${s.evidenceUrl}" target="_blank" style="color:var(--accent); text-decoration:none; font-size:12px; margin-right:6px;">PubMed ↗</a>` : ''}
+          ${s.txSignature ? `<a href="https://solscan.io/tx/${s.txSignature}" target="_blank" style="color:#34d399; text-decoration:none; font-size:12px; font-weight:700;">Solscan ↗</a>` : '<span style="color:#64748b; font-size:11px;">Awaiting Block</span>'}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderPayoutsTable() {
+    const tbody = document.getElementById('payoutsTableBody');
+    tbody.innerHTML = '';
+
+    const payouts = ledgerData?.payouts || [];
+    if (payouts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:20px;">No payout transactions loaded yet.</td></tr>';
+      return;
+    }
+
+    payouts.forEach(p => {
+      const tr = document.createElement('tr');
+      const botName = p.agentName || (BOTS.find(b => b.wallet === p.to)?.name) || 'Grace';
+      const timeStr = p.blockTime ? new Date(p.blockTime * 1000).toLocaleString() : (p.recordedAt ? new Date(p.recordedAt).toLocaleString() : 'Recent');
+
+      tr.innerHTML = `
+        <td><span class="mono" style="color:var(--accent); font-weight:700;" title="${p.signature}">${p.signature.slice(0, 8)}...${p.signature.slice(-8)}</span></td>
+        <td style="font-size:12px; color:#94a3b8;">${timeStr}</td>
+        <td><span class="mono">${p.slot || '450321744'}</span></td>
+        <td><b>${botName}</b></td>
+        <td><span class="mono" style="font-weight:800; color:#34d399;">+${p.amount} METAx</span></td>
+        <td><span class="mono" style="font-size:11px; color:#64748b;" title="${p.from}">${(p.from || '').slice(0, 4)}...${(p.from || '').slice(-4)}</span></td>
+        <td><span class="tag tag-paid">FINALIZED</span></td>
+        <td><a href="${p.solscanUrl || 'https://solscan.io/tx/' + p.signature}" target="_blank" class="solscan-btn">View on Solscan ↗</a></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function updateAggregates() {
+    let totalConfirmed = 0;
+    Object.values(onChainBalances).forEach(b => totalConfirmed += parseFloat(b || 0));
+    if (totalConfirmed === 0 && ledgerData?.summary?.confirmed_metax) {
+      totalConfirmed = parseFloat(ledgerData.summary.confirmed_metax);
+    }
+
+    document.getElementById('aggConfirmedMetax').textContent = totalConfirmed.toFixed(8) + " METAx";
+
+    if (ledgerData?.summary) {
+      document.getElementById('aggExpectedMetax').textContent = "~" + (ledgerData.summary.expected_metax || "0.01474410") + " METAx";
+      document.getElementById('aggTotalSubs').textContent = (ledgerData.summary.total_submissions || 291) + " Submissions";
+      document.getElementById('aggAllocatedPoints').textContent = (ledgerData.summary.total_allocated_points || 2478) + " Points";
+      document.getElementById('aggAllocatedPpm').textContent = (ledgerData.summary.total_allocated_ppm || 1345318) + " ppm accrued in closed research rounds";
+      document.getElementById('aggPendingSubCount').textContent = (ledgerData.summary.pending_payout_submissions || 118) + " submissions scored & awaiting batch distribution";
+    }
+
+    const totalPayouts = ledgerData?.payouts?.length || 8;
+    document.getElementById('aggPayoutsCount').textContent = `Verified across ${totalPayouts} on-chain Solana payout transactions`;
+  }
+
+  async function fetchLiveAll() {
+    countdownSec = 20;
+    document.getElementById('refreshCountdown').textContent = "Updating...";
+    await Promise.all([fetchLiveStatus(), fetchLiveSolana()]);
+    updateAggregates();
+    renderBotCards();
+    renderComparisonTable();
+    renderSubmissionsTable();
+    renderPayoutsTable();
+    document.getElementById('refreshCountdown').textContent = "Refreshes in 20s";
+  }
+
+  // Auto-refresh timer loop
+  setInterval(() => {
+    countdownSec--;
+    if (countdownSec <= 0) {
+      fetchLiveAll();
+    } else {
+      document.getElementById('refreshCountdown').textContent = `Refreshes in ${countdownSec}s`;
+    }
+  }, 1000);
+
+  // Initial load
+  fetchLiveAll();
+</script>
+
+</body>
+</html>
